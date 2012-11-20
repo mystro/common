@@ -50,10 +50,8 @@ module Mystro
         end
         @cfg = Hashie::Mash.new(raw)
 
-        Mystro::Log.info "#{@cfg.inspect}"
-
-        self.class.after :create do |compute, model|
-          Mystro::Plugin.run "#{cname}:create", compute, model.fog_tags
+        self.class.after :create do |e, model|
+          Mystro::Plugin.run "#{cname}:create", e, model
         end
 
         self.class.after :destroy do |e, tags|
@@ -88,12 +86,13 @@ module Mystro
         e
       end
 
-      def destroy(list)
-        list = [*list]
-        list.map {|e| e.kind_of?(String) ? find(e) : e}.each do |e|
-          Mystro::Log.debug "#{cname}#destroy #{e.id}"
+      def destroy(models)
+        list = [*models].flatten
+        list.each do |m|
+          Mystro::Log.debug "#{cname}#destroy #{m.rid}"
+          e = find(m.rid)
           e.destroy
-          hooks :destroy, e, e.tags
+          hooks :destroy, e, e.respond_to?(:tags) ? e.tags : []
         end
       end
 
