@@ -9,8 +9,10 @@ module Mystro
         fog.send(collection).all
       end
 
-      def create(model, zones=[])
-        super(model)
+      def create(model)
+        balancer = fog.send(collection).create(model.fog_options)
+        balancer.register_instances(model.computes.collect{|e| e.rid})
+        balancer.save
       end
 
       def find_by_environment(name)

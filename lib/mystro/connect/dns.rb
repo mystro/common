@@ -19,6 +19,7 @@ module Mystro
         end
       rescue => e
         Mystro::Log.error "DNS connect failed: #{e.message} at #{e.backtrace.first}"
+        Mystro::Log.error e
       end
 
       def zones

@@ -32,8 +32,8 @@ module Mystro
       attr_reader :opt
       attr_reader :fog
 
-      def initialize
-        a = Mystro.account.dup
+      def initialize(account)
+        a = account.data
         c = cname
 
         # opt is used to initialize fog in connect classes
@@ -81,8 +81,8 @@ module Mystro
 
       def create(model)
         Mystro::Log.debug "#{cname}#create #{model.inspect}"
+        Mystro::Log.debug "#{cname}#create #{fog.inspect}"
         e = fog.send(collection).create(model.fog_options)
-        hooks :create, e, model
         e
       end
 
@@ -92,7 +92,6 @@ module Mystro
           Mystro::Log.debug "#{cname}#destroy #{m.rid}"
           e = find(m.rid)
           e.destroy
-          hooks :destroy, e, e.respond_to?(:tags) ? e.tags : []
         end
       end
 

@@ -79,19 +79,19 @@ module Mystro
     end
 
     def compute
-      @compute ||= Mystro::Connect::Compute.new
+      @compute ||= Mystro::Connect::Compute.new(self) if @data.compute
     end
 
     def balancer
-      @balancer ||= Mystro::Connect::Balancer.new
+      @balancer ||= Mystro::Connect::Balancer.new(self) if @data.balancer
     end
 
     def dns
-      @dns ||= Mystro::Connect::Dns.new
+      @dns ||= Mystro::Connect::Dns.new(self) if @data.dns
     end
 
     def environment
-      @environment ||= Mystro::Connect::Environment.new
+      @environment ||= Mystro::Connect::Environment.new(self)
     end
   end
 end

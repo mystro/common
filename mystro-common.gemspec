@@ -22,4 +22,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency "hashie"             # better data objects
   gem.add_dependency "activesupport"      # active support
   gem.add_dependency "ipaddress"          # ip address library
+  gem.add_dependency "erubis"             # userdata templates
 end

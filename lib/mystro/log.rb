@@ -3,10 +3,13 @@ require "yell"
 module Mystro
   class Log
     class << self
+      attr_reader :loggers
+
       def init
         @loggers           = { }
         @loggers["STDOUT"] = Yell.new(STDOUT, :level => [:info, :warn], :format => Yell::NoFormat)
         @loggers["STDERR"] = Yell.new(STDERR, :level => [:error, :fatal], :format => Yell::NoFormat)
+        #@loggers["/tmp/mystro.log"] = Yell.new(:datefile, "/tmp/mystro.log", :level => :debug, :format => Yell::DefaultFormat, :keep => 7, :symlink => true)
       end
 
       def add(level, dest, format=Yell::DefaultFormat)

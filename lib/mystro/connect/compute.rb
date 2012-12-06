@@ -50,9 +50,30 @@ module Mystro
         all(filters)
       end
 
-      after :create do |compute, model|
-        Mystro::Log.debug "compute#after_create #{compute.id} #{model.fog_tags}"
-        fog.create_tags(compute.id, model.fog_tags)
+      def create(model)
+        Mystro::Log.debug "#{cname}#create #{model.inspect}"
+        e = fog.send(collection).create(model.fog_options)
+        fog.create_tags(e.id, model.fog_tags)
+        Mystro::Plugin.run "compute:create", e, model
+        e
+      end
+
+      #after :create do |compute, model|
+      #  Mystro::Log.debug "compute#after_create #{compute.id} #{model.fog_tags}"
+      #  Mystro::Log.debug "#{cname}#create #{fog.inspect}"
+      #  sleep 3
+      #end
+
+      def destroy(models)
+        list = [*models].flatten
+        list.each do |m|
+          Mystro::Log.debug "#{cname}#destroy #{m.rid}"
+          e = find(m.rid)
+          Mystro::Plugin.run "compute:destroy", e, m
+          e.destroy
+          tags = e.tags.keys.inject({ }) { |h, e| h[e] = nil; h }
+          fog.create_tags([e.id], tags)
+        end
       end
 
       #def destroy(list)
@@ -61,19 +82,19 @@ module Mystro
       #    ids = list.map {|e| e.kind_of?(String) ? e : e.id}
       #    Mystro::Log.debug "compute#destroy: #{ids.inspect}"
       #    list.each do |e|
+      #      Mystro::Plugin.run "compute:destroy", e
       #      e.destroy
-      #      Mystro::Plugin.run "instance:destroy", e, e.tags
       #      tags = e.tags.keys.inject({}) {|h, e| h[e] = nil; h }
       #      fog.create_tags(ids, tags)
       #    end
       #  end
       #end
 
-      after :destroy do |compute, tags|
-        Mystro::Log.debug "#{cname}#after_destroy"
-        tags = compute.tags.keys.inject({ }) { |h, e| h[e] = nil; h }
-        fog.create_tags([compute.id], tags) if tags.count > 0
-      end
+      #after :destroy do |compute, tags|
+      #  Mystro::Log.debug "#{cname}#after_destroy"
+      #  tags = compute.tags.keys.inject({ }) { |h, e| h[e] = nil; h }
+      #  fog.create_tags([compute.id], tags) if tags.count > 0
+      #end
     end
   end
 end

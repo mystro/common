@@ -60,6 +60,7 @@ require "mystro/log"
 require "mystro/dsl/template"
 require "mystro/plugin"
 require "mystro/connect"
+require "mystro/userdata"
 
+Mystro::Config.instance
 Mystro::Account.read
-Mystro::Log.init
