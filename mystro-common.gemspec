@@ -8,9 +8,9 @@ Gem::Specification.new do |gem|
   gem.version       = Mystro::Common::Version::STRING
   gem.authors       = ["Shawn Catanzarite"]
   gem.email         = ["me@shawncatz.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{common functionality for Mystro}
+  gem.summary       = %q{common functionality for Mystro}
+  gem.homepage      = "http://github.com/mystro"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
