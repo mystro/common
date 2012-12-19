@@ -19,6 +19,7 @@ module Mystro
             :name         => name,
             :roles        => roles,
             :environment  => environment,
+            :nickname     => name,
             :account      => "unknown",
             :zone         => "unknown.local",
             :dependencies => [],
