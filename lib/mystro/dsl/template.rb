@@ -2,11 +2,19 @@ module Mystro
   module DSL
     module Template
       class << self
-        def load(name)
+        def load(name_or_file)
           @templates    ||= { }
-          template_name = name.to_sym
-          template_file = "#{dir}/#{name}.rb"
-          raise "could not load template #{template_name} (#{template_file})" unless File.file?(template_file)
+          template_name = nil
+          template_file = nil
+          puts "NF: #{name_or_file}"
+          if File.exists?(name_or_file)
+            template_name = File.basename(name_or_file).gsub(/\.rb$/,"").to_sym
+            template_file = name_or_file
+          elsif File.exists?("#{dir}/#{name_or_file}.rb")
+            template_name = name.to_sym
+            template_file = "#{dir}/#{name}.rb"
+          end
+          raise "could not load template #{template_name} (#{template_file})" unless template_file && File.file?(template_file)
           #raise "template already loaded #{template_name}" if @templates[template_name]
           @templates[template_name] ||= begin
             t = Mystro::DSL::Template::DSL.new(template_name)
