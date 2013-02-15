@@ -6,7 +6,6 @@ module Mystro
           @templates    ||= { }
           template_name = nil
           template_file = nil
-          puts "NF: #{name_or_file}"
           if File.exists?(name_or_file)
             template_name = File.basename(name_or_file).gsub(/\.rb$/,"").to_sym
             template_file = name_or_file
