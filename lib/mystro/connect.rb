@@ -91,7 +91,7 @@ module Mystro
         list.each do |m|
           Mystro::Log.debug "#{cname}#destroy #{m.rid}"
           e = find(m.rid)
-          e.destroy
+          e.destroy if e
         end
       end
 

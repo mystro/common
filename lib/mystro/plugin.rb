@@ -59,6 +59,7 @@ module Mystro
 
       def command(name, desc, klass=nil, &block)
         on "commands:loaded" do |args|
+          Mystro::Log.debug "loading commands for #{name}"
           command = args.shift
           if klass
             command.subcommand name, "#{desc} (#{self})", klass
