@@ -42,6 +42,14 @@ module Mystro
         listener.destroy
       end
 
+      def health_check(id, health)
+        Mystro::Log.debug "balancer#health_check #{id} #{health.inspect}"
+        balancer = find(id)
+        raise "balancer #{id} not found" unless balancer
+
+        fog.configure_health_check(id, health.fog_options)
+      end
+
       def sticky(id, type, expires_or_cookie, port, policy=nil)
         balancer = find(id)
         raise "balancer #{id} not found" unless balancer

@@ -3,11 +3,11 @@ module Mystro
     module Template
       class << self
         def load(name_or_file)
-          @templates    ||= { }
+          @templates    ||= {}
           template_name = nil
           template_file = nil
           if File.exists?(name_or_file)
-            template_name = File.basename(name_or_file).gsub(/\.rb$/,"").to_sym
+            template_name = File.basename(name_or_file).gsub(/\.rb$/, "").to_sym
             template_file = name_or_file
           elsif File.exists?("#{dir}/#{name_or_file}.rb")
             template_name = name.to_sym
@@ -32,7 +32,7 @@ module Mystro
         end
 
         def list
-          Dir["#{dir}/*"].inject({ }) do |h, e|
+          Dir["#{dir}/*"].inject({}) do |h, e|
             f           = e.gsub("#{dir}/", "")
             f           = File.basename(f, ".yml")
             h[f.to_sym] = e
@@ -184,6 +184,12 @@ module Mystro
           @listeners << listener
         end
 
+        def health(&block)
+          healthcheck = HealthCheck.new
+          healthcheck.instance_eval &block
+          @healthcheck = healthcheck
+        end
+
         def listeners
           @listeners.map { |e| e.spec }
         end
@@ -226,6 +232,47 @@ module Mystro
               :from => "#@from_proto:#@from_port",
               :to   => "#@to_proto:#@to_port",
               :cert => @cert,
+          }
+        end
+      end
+
+      class HealthCheck
+        def initialize
+          @healthy   = 10
+          @unhealthy = 2
+          @interval  = 30
+          @target    = nil
+          @timeout   = 5
+        end
+
+        def healthy(v)
+          @healthy = v
+        end
+
+        def unhealthy(v)
+          @unhealthy = v
+        end
+
+        def interval(v)
+          @interval = v
+        end
+
+        def target(v)
+          @target = v
+        end
+
+        def timeout(v)
+          @timeout = v
+        end
+
+        def spec
+          raise "target not specified for health check" unless @target
+          {
+              healthy: @healthy,
+              unhealthy: @unhealthy,
+              interval: @interval,
+              target: @target,
+              timeout: @timeout,
           }
         end
       end
