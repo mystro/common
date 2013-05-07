@@ -49,3 +49,13 @@ desc "show current changes (changelog output from HEAD to most recent tag)"
 task :current do
   changelog("HEAD",true)
 end
+
+task :test do
+  require "mystro-common"
+  require "awesome_print"
+  %w{simple medium complex}.each do |n|
+    file = "test/#{n}.rb"
+    puts "processing: #{n} #{file}"
+    Mystro::Template.load(file)
+  end
+end

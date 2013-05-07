@@ -57,10 +57,12 @@ end
 require "mystro/config"
 require "mystro/account"
 require "mystro/log"
-require "mystro/dsl/template"
+
+require "mystro/dsl"
 require "mystro/plugin"
 require "mystro/connect"
 require "mystro/userdata"
+require "mystro/template"
 
 Mystro::Config.instance
 Mystro::Account.read
