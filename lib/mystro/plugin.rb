@@ -35,10 +35,51 @@ module Mystro
         end
       end
 
-      def register(plugin, type, klass)
+      def register(key, opts={})
         @plugins ||= {}
-        @plugins[type] ||= {}
-        @plugins[type][plugin] = klass
+        @plugins[key] = opts
+        name = key.to_s.capitalize
+        @plugins[key][:name] = name
+      end
+
+      def ui
+        @ui ||= begin
+          ui = {}
+          @plugins.each do |key, opts|
+            if opts[:ui]
+              n = opts[:name]
+              ui[n] = opts[:ui]
+            end
+          end
+          ui
+        end
+      end
+
+      def jobs
+        @jobs ||= begin
+          jobs = []
+          @plugins.each do |key, opts|
+            if opts[:jobs]
+              jobs << opts[:jobs]
+            end
+          end
+          jobs.flatten
+        end
+      end
+
+      def schedule
+        @schedule ||= begin
+          s = {}
+          @plugins.each do |key, opts|
+            if opts[:schedule]
+              opts[:schedule].each do |w, o|
+                n = w.to_s.capitalize + "Worker"
+                s[n] = { "cron" => o}
+              end
+            end
+          end
+          s
+        end
       end
     end
 
@@ -56,6 +97,16 @@ module Mystro
       def on(event, &block)
         Mystro::Plugin.on(self, event, &block)
       end
+
+      def register(opts={})
+        key = self.name.split('::').last.downcase.to_sym
+        Mystro::Plugin.register(key, opts)
+      end
+
+      #def ui(path)
+      #  name = self.name.split('::').last
+      #  Mystro::Plugin.register_ui(name, path)
+      #end
 
       def command(name, desc, klass=nil, &block)
         on "commands:loaded" do |args|
