@@ -62,7 +62,8 @@ module Mystro
       end
 
       def connect
-        @fog ||= model.new(opt) if opt
+        #puts "connect: #{model}.new(#{opt.to_hash.symbolize_keys})"
+        @fog ||= model.new(opt.to_hash.symbolize_keys) if opt
       rescue => e
         Mystro::Log.error "#{cname} connect failed: #{e.message} at #{e.backtrace.first}"
       end

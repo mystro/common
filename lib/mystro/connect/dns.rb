@@ -14,24 +14,31 @@ module Mystro
       def connect
         @fog ||= begin
           raise "could not connect to DNS; #{opt.to_hash.inspect}; #{cfg.to_hash.inspect}" unless opt && cfg.zone
-          dns = Fog::DNS.new(opt)
-          dns.zones.find(cfg.zone).first
+          zone(cfg.zone)
         end
       rescue => e
         Mystro::Log.error "DNS connect failed: #{e.message} at #{e.backtrace.first}"
         Mystro::Log.error e
       end
 
+      def connection
+        Fog::DNS.new(opt.to_hash.symbolize_keys)
+      end
+
       def zones
-        Fog::DNS.new(opt).zones.all
+        connection.zones.all
       end
 
       def zone(name)
-        Fog::DNS.new(opt).zones.find(name).first
+        z = connection.zones.get(name)
+        raise("zone #{name} not found") unless z
+        z
+      rescue => e
+        raise("problem retrieving zone #{name}: #{e.message} at #{e.backtrace.first}")
       end
 
       def create_zone(model)
-        Fog::DNS.new(opt).zones.create(model.fog_options)
+        connection.zones.create(model.fog_options)
       end
     end
   end
