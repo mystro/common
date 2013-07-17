@@ -11,6 +11,7 @@ module Mystro
     end
 
     def account
+      raise "mystro account unset! default account ('#{config.default_account}') doesn't exist?" unless current_account
       current_account.data
     end
 

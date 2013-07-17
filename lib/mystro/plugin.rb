@@ -45,7 +45,7 @@ module Mystro
       def ui
         @ui ||= begin
           ui = {}
-          @plugins.each do |key, opts|
+          (@plugins||{}).each do |key, opts|
             if opts[:ui]
               n = opts[:name]
               ui[n] = opts[:ui]
@@ -58,7 +58,7 @@ module Mystro
       def jobs
         @jobs ||= begin
           jobs = []
-          @plugins.each do |key, opts|
+          (@plugins||{}).each do |key, opts|
             if opts[:jobs]
               jobs << opts[:jobs]
             end
@@ -70,7 +70,7 @@ module Mystro
       def schedule
         @schedule ||= begin
           s = {}
-          @plugins.each do |key, opts|
+          (@plugins||{}).each do |key, opts|
             if opts[:schedule]
               opts[:schedule].each do |w, o|
                 n = w.to_s.capitalize + "Worker"
