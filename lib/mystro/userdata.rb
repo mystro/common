@@ -8,6 +8,8 @@ module Mystro
         dependencies = opts.delete(:dependencies)
         gems         = opts.delete(:gems)
         files        = opts.delete(:files)
+        templates    = opts.delete(:templates)
+
         directory    = "#{Mystro.directory}/userdata/#{package}"
         file         = "#{directory}/userdata.yml"
         raise "userdata error: package not specified" unless package
@@ -25,13 +27,17 @@ module Mystro
             :dependencies => [],
             :gems         => [],
             :files        => [],
+            :templates    => [],
             :directory    => directory,
             :template     => "userdata.sh.erb",
         }.deep_merge(config.symbolize_keys!).deep_merge(opts.symbolize_keys!)
 
+        data[:data] = data
+
         data[:gems] += gems if gems
         data[:dependencies] += dependencies if dependencies
         data[:files] += files if files
+        data[:templates] += templates if templates
 
         template = File.open("#{directory}/#{data[:template]}").read
         erb      = Erubis::Eruby.new(template)
