@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.4:
+* merge
+* hard code rake version in Gemfile to match mystro server
+* support for templates in userdata, handled like files, but processed through erubis
+
 ## v0.1.3:
 * fixes bugs with dns usage and plugin methods when no plugins are defined
 * update ruby version
