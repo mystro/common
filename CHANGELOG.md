@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.8:
+* revert new dsl creeping in when it wasnt supposed to
+
 ## v0.1.7:
 * fix lingering error with Account.list change
 * merge v0.1.6
