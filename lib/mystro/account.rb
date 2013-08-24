@@ -29,8 +29,8 @@ module Mystro
       def default
         return ENV['MYSTRO_ACCOUNT'] if ENV['MYSTRO_ACCOUNT']
         return Mystro.config.default_account if Mystro.config.default_account?
-        return "default" if list.keys.include?("default")
-        list.keys.first
+        return "default" if @list.keys.include?("default")
+        @list.keys.first
       end
 
       def select(name)
