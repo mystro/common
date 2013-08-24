@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.1.7:
+* fix lingering error with Account.list change
+* merge v0.1.6
+* merge release v0.1.2
+* new DSL framework
+* ruby version file
+* changelog rake tasks
+
 ## v0.1.6:
 
 ## v0.1.5:
