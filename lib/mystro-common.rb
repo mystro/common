@@ -16,7 +16,7 @@ module Mystro
     end
 
     def current_account
-      Mystro::Account.list[selected]
+      Mystro::Account.get(selected)
     end
 
     def directory

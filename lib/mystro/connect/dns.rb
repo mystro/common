@@ -13,7 +13,8 @@ module Mystro
       # to the zone from the configuration
       def connect
         @fog ||= begin
-          raise "could not connect to DNS; #{opt.to_hash.inspect}; #{cfg.to_hash.inspect}" unless opt && cfg.zone
+          raise "must set zone" unless cfg.zone
+          raise "must set options" unless opt
           zone(cfg.zone)
         end
       rescue => e
