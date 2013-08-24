@@ -1,9 +1,16 @@
 # Changelog
 
-## v0.1.4:
-* merge
+## v0.1.6:
+
+## v0.1.5:
+* update rails to 3.2.14. tweak plugins jobs output to match qujo. fix issue with getting zones through fog
+* smarter errors in dns connect. add and use Account#get instead of @list attr
 * hard code rake version in Gemfile to match mystro server
 * support for templates in userdata, handled like files, but processed through erubis
+* merge release v0.1.2
+* new DSL framework
+* ruby version file
+* changelog rake tasks
 
 ## v0.1.3:
 * fixes bugs with dns usage and plugin methods when no plugins are defined
