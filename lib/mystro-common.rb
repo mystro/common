@@ -11,11 +11,12 @@ module Mystro
     end
 
     def account
+      raise "mystro account unset! default account ('#{config.default_account}') doesn't exist?" unless current_account
       current_account.data
     end
 
     def current_account
-      Mystro::Account.list[selected]
+      Mystro::Account.get(selected)
     end
 
     def directory

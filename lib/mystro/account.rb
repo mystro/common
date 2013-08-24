@@ -2,8 +2,16 @@ module Mystro
   class Account
     class << self
       #attr_reader :name
-      attr_reader :list
+      #attr_reader :list
       attr_reader :selected
+
+      def [](name)
+        get(name)
+      end
+
+      def get(name)
+        @list[name]
+      end
 
       def read
         dir   = Mystro.directory

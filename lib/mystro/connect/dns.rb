@@ -9,29 +9,42 @@ module Mystro
         all.select {|e| [*e.value].flatten.include?(dns)}
       end
 
+      def find_by_name(name)
+        connection.zones.all.detect {|e| e.domain == name}
+      end
+
       # customize the connect function, because we are defaulting
       # to the zone from the configuration
       def connect
         @fog ||= begin
-          raise "could not connect to DNS; #{opt.to_hash.inspect}; #{cfg.to_hash.inspect}" unless opt && cfg.zone
-          dns = Fog::DNS.new(opt)
-          dns.zones.find(cfg.zone).first
+          raise "must set zone" unless cfg.zone
+          raise "must set options" unless opt
+          find_by_name(cfg.zone)
         end
       rescue => e
         Mystro::Log.error "DNS connect failed: #{e.message} at #{e.backtrace.first}"
         Mystro::Log.error e
       end
 
+      def connection
+        Fog::DNS.new(opt.to_hash.symbolize_keys)
+      end
+
       def zones
-        Fog::DNS.new(opt).zones.all
+        connection.zones.all
       end
 
       def zone(name)
-        Fog::DNS.new(opt).zones.find(name).first
+        n = "#{name}."
+        z = connection.zones.get(n)
+        raise("zone #{n} not found") unless z
+        z
+      rescue => e
+        raise("#{e.message} at #{e.backtrace.first}")
       end
 
       def create_zone(model)
-        Fog::DNS.new(opt).zones.create(model.fog_options)
+        connection.zones.create(model.fog_options)
       end
     end
   end
