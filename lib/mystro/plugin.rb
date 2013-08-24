@@ -57,13 +57,13 @@ module Mystro
 
       def jobs
         @jobs ||= begin
-          jobs = []
+          jobs = {}
           (@plugins||{}).each do |key, opts|
             if opts[:jobs]
-              jobs << opts[:jobs]
+              jobs[key] = opts[:jobs]
             end
           end
-          jobs.flatten
+          jobs
         end
       end
 
