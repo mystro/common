@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.9:
+* fucking bug in dns code again
+
 ## v0.1.8:
 * revert new dsl creeping in when it wasnt supposed to
 
