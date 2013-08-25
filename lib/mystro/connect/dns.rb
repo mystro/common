@@ -10,7 +10,7 @@ module Mystro
       end
 
       def find_by_name(name)
-        connection.zones.all.detect {|e| e.domain == name}
+        connection.zones.all.detect {|e| e.domain == "#{name}."}
       end
 
       # customize the connect function, because we are defaulting
