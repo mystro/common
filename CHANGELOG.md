@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.10:
+* allow for disabling plugins
+
 ## v0.1.9:
 * fucking bug in dns code again
 
