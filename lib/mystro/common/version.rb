@@ -3,7 +3,7 @@ module Mystro
     module Version
       MAJOR = 0
       MINOR = 1
-      TINY  = 10
+      TINY  = 11
       TAG   = nil
       STRING = [MAJOR, MINOR, TINY, TAG].compact.join(".")
     end
