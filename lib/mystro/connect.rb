@@ -32,8 +32,8 @@ module Mystro
       attr_reader :opt
       attr_reader :fog
 
-      def initialize(account)
-        a = account.data
+      def initialize(organization)
+        a = organization.data
         c = cname
 
         # opt is used to initialize fog in connect classes

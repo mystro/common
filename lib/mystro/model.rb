@@ -31,10 +31,10 @@ module Mystro
       def load_from_config
         cname    = self.class.name.split("::").last.downcase
         config = { }
-        if Mystro.account && Mystro.account[cname]
-          config = Mystro.account[cname].to_hash
+        if Mystro.organization && Mystro.organization[cname]
+          config = Mystro.organization[cname].to_hash
         end
-        config["account"] = Mystro.selected
+        config["organization"] = Mystro.selected
         config
       end
 

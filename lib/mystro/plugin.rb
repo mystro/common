@@ -95,7 +95,7 @@ module Mystro
 
       def config_for(klass)
         name = klass.name.split('::').last.downcase.to_sym
-        return Mystro.account.plugins[name] if Mystro.account.plugins && Mystro.account.plugins[name]
+        return Mystro.organization.plugins[name] if Mystro.organization.plugins && Mystro.organization.plugins[name]
         { }
       end
 

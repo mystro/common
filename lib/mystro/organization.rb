@@ -1,5 +1,5 @@
 module Mystro
-  class Account
+  class Organization
     class << self
       #attr_reader :name
       #attr_reader :list
@@ -17,9 +17,9 @@ module Mystro
         dir   = Mystro.directory
         @list = { }
 
-        Dir["#{dir}/accounts/*.y*ml"].each do |file|
-          name = file.gsub(/#{dir}\/accounts\//, "").gsub(/\.(\w+?)$/, "")
-          Mystro::Log.debug "loading account '#{name}' '#{file}'"
+        Dir["#{dir}/organizations/*.y*ml"].each do |file|
+          name = file.gsub(/#{dir}\/organizations\//, "").gsub(/\.(\w+?)$/, "")
+          Mystro::Log.debug "loading organization '#{name}' '#{file}'"
           @list[name] = self.new(name, file)
         end
 
@@ -27,8 +27,8 @@ module Mystro
       end
 
       def default
-        return ENV['MYSTRO_ACCOUNT'] if ENV['MYSTRO_ACCOUNT']
-        return Mystro.config.default_account if Mystro.config.default_account?
+        return ENV['MYSTRO_ORGANIZATION'] if ENV['MYSTRO_ORGANIZATION']
+        return Mystro.config.default_organization if Mystro.config.default_organization?
         return "default" if @list.keys.include?("default")
         @list.keys.first
       end
@@ -45,11 +45,11 @@ module Mystro
       #  end
       #
       #  @data ||= begin
-      #    Mystro::Log.debug "loading account"
-      #    a        = Mystro::Model::Account.load(name)
+      #    Mystro::Log.debug "loading organization"
+      #    a        = Mystro::Model::Organization.load(name)
       #    a[:name] = name
       #
-      #    Mystro::Log.debug "loading plugins from account"
+      #    Mystro::Log.debug "loading plugins from organization"
       #    Mystro::Plugin.load(a[:plugins]) if a[:plugins]
       #
       #    a
@@ -60,16 +60,16 @@ module Mystro
       #end
       #
       #def get
-      #  return ENV['RIG_ACCOUNT'] if ENV['RIG_ACCOUNT']
-      #  return Mystro.config[:account] if Mystro.config[:account]
-      #  return Mystro.config[:default_account] if Mystro.config[:default_account]
-      #  return Mystro.config[:accounts].first if Mystro.config[:accounts] && Mystro.config[:accounts].count > 0
+      #  return ENV['RIG_ORGANIZATION'] if ENV['RIG_ORGANIZATION']
+      #  return Mystro.config[:organization] if Mystro.config[:organization]
+      #  return Mystro.config[:default_organization] if Mystro.config[:default_organization]
+      #  return Mystro.config[:organizations].first if Mystro.config[:organizations] && Mystro.config[:organizations].count > 0
       #  "default"
       #end
       #
       #def save
-      #  name = Mystro.account[:name]
-      #  Mystro::Model::Account.save(name, Mystro.account)
+      #  name = Mystro.organization[:name]
+      #  Mystro::Model::Organization.save(name, Mystro.organization)
       #end
     end
 
@@ -79,10 +79,10 @@ module Mystro
 
     def initialize(name, file)
       cfg     = Mystro.config.to_hash
-      account = File.exists?(file) ? YAML.load_file(file) : { }
+      organization = File.exists?(file) ? YAML.load_file(file) : { }
       @name   = name
       @file   = file
-      @data   = Hashie::Mash.new(cfg.deep_merge(account))
+      @data   = Hashie::Mash.new(cfg.deep_merge(organization))
       @data.name = name
     end
 

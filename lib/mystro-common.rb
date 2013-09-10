@@ -10,13 +10,13 @@ module Mystro
       Mystro::Config.instance.data
     end
 
-    def account
-      raise "mystro account unset! default account ('#{config.default_account}') doesn't exist?" unless current_account
-      current_account.data
+    def organization
+      raise "mystro organization unset! default organization ('#{config.default_organization}') doesn't exist?" unless current_organization
+      current_organization.data
     end
 
-    def current_account
-      Mystro::Account.get(selected)
+    def current_organization
+      Mystro::Organization.get(selected)
     end
 
     def directory
@@ -34,29 +34,29 @@ module Mystro
     end
 
     def selected
-      Mystro::Account.selected
+      Mystro::Organization.selected
     end
 
     def compute
-      current_account.compute
+      current_organization.compute
     end
 
     def dns
-      current_account.dns
+      current_organization.dns
     end
 
     def balancer
-      current_account.balancer
+      current_organization.balancer
     end
 
     def environment
-      current_account.environment
+      current_organization.environment
     end
   end
 end
 
 require "mystro/config"
-require "mystro/account"
+require "mystro/organization"
 require "mystro/log"
 require "mystro/dsl/template"
 require "mystro/plugin"
@@ -64,4 +64,4 @@ require "mystro/connect"
 require "mystro/userdata"
 
 Mystro::Config.instance
-Mystro::Account.read
+Mystro::Organization.read
