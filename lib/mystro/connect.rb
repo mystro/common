@@ -37,16 +37,24 @@ module Mystro
         c = cname
 
         # opt is used to initialize fog in connect classes
-        defaults = a.connect!.fog? ? a.connect.fog : {}
-        overrides = a[c] && a[c].fog? ? a[c].fog : {}
+        #defaults = a.connect!.fog? ? a.connect.fog : {}
+        #overrides = a[c] && a[c].fog? ? a[c].fog : {}
+        defaults = a.connect!.provider? ? a.connect.provider : {}
+        overrides = a[c] && a[c].provider? ? a[c].provider : {}
         raw = defaults.deep_merge(overrides)
+        if raw && raw['name']
+          n = raw.delete('name')
+          p = Mystro::Provider[n]
+          raise "provider '#{p}' does not exist" unless p
+          raw.deep_merge!(p.to_hash)
+        end
+        puts "RAW: #{raw.inspect}"
         @opt = Hashie::Mash.new(raw)
 
         # cfg is the additional configuration parms (aside from the fog block)
         raw = {}
-        if a[c]
-          raw = a[c].to_hash
-          raw.delete(:fog) if raw[:fog]
+        if a[c] && a[c]['config']
+          raw = a[c]['config'].to_hash
         end
         @cfg = Hashie::Mash.new(raw)
 

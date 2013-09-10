@@ -56,6 +56,7 @@ module Mystro
 end
 
 require "mystro/config"
+require "mystro/provider"
 require "mystro/organization"
 require "mystro/log"
 require "mystro/dsl/template"
@@ -64,4 +65,5 @@ require "mystro/connect"
 require "mystro/userdata"
 
 Mystro::Config.instance
+Mystro::Provider.read
 Mystro::Organization.read
