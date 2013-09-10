@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.11:
+* fixes bug if disabled is not set
+
 ## v0.1.10:
 * allow for disabling plugins
 
