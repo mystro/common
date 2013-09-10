@@ -36,8 +36,8 @@ module Mystro
       end
 
       def disabled?(name)
-        Mystro::Log.info "disabled? #{name}"
-        Mystro.config.disabled[name]
+        Mystro::Log.debug "disabled? #{name}"
+        Mystro.config.disabled && Mystro.config.disabled[name]
       end
 
       def register(key, opts={})
