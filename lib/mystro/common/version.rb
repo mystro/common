@@ -5,7 +5,8 @@ module Mystro
       MINOR = 1
       TINY  = 11
       TAG   = nil
-      STRING = [MAJOR, MINOR, TINY, TAG].compact.join(".")
+      LIST  = [MAJOR, MINOR, TINY, TAG]
+      STRING = LIST.compact.join(".")
     end
   end
 end
