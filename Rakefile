@@ -1,4 +1,8 @@
-require "bundler/gem_tasks"
+require 'bundler/gem_tasks'
+require 'rspec/core/rake_task'
+
+RSpec::Core::RakeTask.new(:spec)
+task :default => :spec
 
 def changelog(last=nil, single=false)
   command="git --no-pager log --format='%an::::%h::::%s'"

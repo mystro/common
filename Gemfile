@@ -5,3 +5,4 @@ gemspec
 
 gem "rake", '10.0.4'
 gem 'awesome_print'
+gem 'rspec'
