@@ -31,17 +31,39 @@ def show(obj)
   keys = obj.keys
   rows = []
   keys.each do |k|
-    rows << [k, obj[k].inspect]
+    list = [obj[k]].flatten
+    list.each do |v|
+      if v.is_a?(Hash)
+        v = v.inject([]) {|s, e| s << e.join(": ")}.join("\n")
+      end
+      v
+      rows << [k, v]
+    end
   end
   table(%w{key value}, rows)
 end
 
+def options
+  {aws_access_key_id: 'AKIAIVMUCDVWWZFFLVGA', aws_secret_access_key: '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'}
+end
+
+Mystro::Log.console_debug
+Mystro::Log.debug "logging ... "
+
 desc 'get and show compute'
 task :compute do
-  compute = Mystro::Cloud.new(provider: :aws, type: :compute, aws_access_key_id: 'AKIAIVMUCDVWWZFFLVGA', aws_secret_access_key: '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')
-  c = compute.find("i-69d32404")
-  e = c.to_hash
-  e.merge!(name: c.name)
+  x = Mystro::Cloud.new({provider: :aws, type: :compute}.merge(options))
+  o = x.find("i-69d32404")
+  e = o.to_hash
+  e.merge!(name: o.name)
+  puts show(e)
+end
+
+desc 'get and show balancer'
+task :balancer do
+  x = Mystro::Cloud.new({provider: :aws, type: :balancer}.merge(options))
+  o = x.find 'RG-EVENTS-1'
+  e = o.to_hash
   puts show(e)
 end
 

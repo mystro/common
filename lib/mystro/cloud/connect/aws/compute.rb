@@ -3,7 +3,7 @@ require 'mystro/cloud/connect/aws'
 module Mystro
   module Cloud
     module Aws
-      class Compute < Mystro::Cloud::Aws::Connect
+      class Compute < Connect
         manages 'Fog::Compute', :servers
 
         def all(filters={})

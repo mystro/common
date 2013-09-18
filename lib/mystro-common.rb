@@ -56,10 +56,10 @@ module Mystro
 end
 
 require "mystro/config"
-require 'mystro/cloud'
+require "mystro/log"
 require "mystro/provider"
 require "mystro/organization"
-require "mystro/log"
+require 'mystro/cloud'
 require "mystro/dsl/template"
 require "mystro/plugin"
 require "mystro/connect"

@@ -1,4 +1,5 @@
 require 'fog'
+require 'mystro/ext/fog/balancer'
 
 module Mystro
   module Cloud
@@ -59,55 +60,65 @@ module Mystro
 
         def decode(inc)
           return inc.map { |e| decode(e) } if inc.is_a?(Array)
+          #Mystro::Log.debug "incoming: #{inc.inspect}"
 
           out = instance
           return out unless inc
-          #puts "incoming: #{inc.inspect}"
           self.class.decoders.each do |d|
-            #puts "D:#{d.inspect}"
+            #Mystro::Log.debug "decoder:#{d.inspect}"
             name = d[:name].to_sym
             from = d[:from] ? d[:from].to_sym : name
             raw = inc.send(from) rescue :no_method
+            #Mystro::Log.debug "raw:#{raw.inspect}"
             list = raw.respond_to?(:each) ? raw : [raw].flatten
 
-            values = list.map do |e|
-              #puts "each: #{e}"
-              v = :unknown
-              if d[:block]
-                v = case d[:block].arity
-                      when 1
-                        instance_exec(e, &d[:block])
-                      when 2
-                        instance_exec(out, e, &d[:block])
-                      else
-                        instance_exec(out, inc, e, &d[:block])
-                    end
-              elsif d[:map]
-                v = d[:map].call(e)
-                #elsif d[:lookup]
-                #  c = lookup(d[:lookup])
-                #  v = c.find(e)
-              else
-                v = e
+            values = nil
+            if list.is_a?(Array)
+              values = list.map do |e|
+                decode_one(d, e, out, inc)
               end
-              v
+              values = values.first unless d[:type] == Array
+            elsif list.is_a?(Hash)
+              values = list
             end
 
-            if d[:type] == Array
-              #puts "values: #{values.inspect}"
-              out.send("#{name}=", values)
-            else
-              #puts "values: #{values.first.inspect}"
-              out.send("#{name}=", values.first)
-            end
+            out.send("#{name}=", values)
           end
 
-          #puts "outgoing: #{out.inspect}"
+          #Mystro::Log.debug "outgoing: #{out.inspect}"
           out.validate!
           out
         end
 
         protected
+
+        def decode_one(d, e, out, inc)
+          #Mystro::Log.debug "each: #{e.inspect}"
+          v = :unknown
+          if d[:block]
+            v = case d[:block].arity
+                  when 1
+                    instance_exec(e, &d[:block])
+                  when 2
+                    instance_exec(out, e, &d[:block])
+                  else
+                    instance_exec(out, inc, e, &d[:block])
+                end
+          elsif d[:map]
+            v = d[:map].call(e)
+          elsif d[:of]
+            c = d[:of]
+            #Mystro::Log.debug "class: #{c.inspect}"
+            v = c.new(options).decode(e)
+            #elsif d[:lookup]
+            #  c = lookup(d[:lookup])
+            #  v = c.find(e)
+          else
+            v = e
+          end
+          #Mystro::Log.debug "each: = #{v}"
+          v
+        end
 
         def instance
           c = self.class.klass
