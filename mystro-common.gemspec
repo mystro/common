@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "fog", "~> 1.12.1"        # talk to cloud
+  #gem.add_dependency "aws-sdk", "~> 1.0.0"     # talk to cloud
   gem.add_dependency "yell", "~> 1.2.0"        # logging
   gem.add_dependency "hashie"                  # better data objects
   gem.add_dependency "activesupport", "3.2.14" # active support

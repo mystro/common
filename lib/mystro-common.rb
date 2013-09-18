@@ -1,6 +1,6 @@
 require "mystro/common/version"
-require "fog"
-require "mystro/ext/fog/balancer"
+#require "fog"
+#require "mystro/ext/fog/balancer"
 require "hashie/mash"
 require "active_support/all"
 
@@ -56,6 +56,7 @@ module Mystro
 end
 
 require "mystro/config"
+require 'mystro/cloud'
 require "mystro/provider"
 require "mystro/organization"
 require "mystro/log"

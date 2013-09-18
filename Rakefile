@@ -1,8 +1,49 @@
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
+require 'mystro-common'
+require 'terminal-table'
 
 RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
+def table(head, rows=nil)
+  if rows
+    t = Terminal::Table.new :headings => head, :rows => rows
+  else
+    t = Terminal::Table.new :rows => rows
+  end
+  t
+end
+
+def list(keys, list)
+  #ap list
+  rows = []
+  list.each do |l|
+    row = []
+    keys.each do |k|
+      row << (l[k] || l[k.downcase] || l[k.to_sym] || l[k.downcase.to_sym])
+    end
+    rows << row
+  end
+  table(keys, rows)
+end
+
+def show(obj)
+  keys = obj.keys
+  rows = []
+  keys.each do |k|
+    rows << [k, obj[k].inspect]
+  end
+  table(%w{key value}, rows)
+end
+
+desc 'get and show compute'
+task :compute do
+  compute = Mystro::Cloud.new(provider: :aws, type: :compute, aws_access_key_id: 'AKIAIVMUCDVWWZFFLVGA', aws_secret_access_key: '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')
+  c = compute.find("i-69d32404")
+  e = c.to_hash
+  e.merge!(name: c.name)
+  puts show(e)
+end
 
 def changelog(last=nil, single=false)
   command="git --no-pager log --format='%an::::%h::::%s'"
