@@ -1,6 +1,5 @@
-require 'mystro-common'
-
-describe Mystro::Cloud::Aws::Balancer do
+require 'spec_helper'
+describe Mystro::Cloud::Aws::Record do
   def cloud
     @cloud ||= Mystro.record
   end
@@ -15,7 +14,9 @@ describe Mystro::Cloud::Aws::Balancer do
   end
 
   def instance
-    @instance ||= cloud.create(model)
+    @instance ||= begin
+      cloud.create(model)
+    end
   end
 
   before(:all) do
@@ -25,12 +26,12 @@ describe Mystro::Cloud::Aws::Balancer do
   end
 
   context "find" do
-    let(:id) { 'mystro.dev.ops.rgops.com' }
-    let(:instance) { cloud.find(id) }
+    let(:name) { 'mystro.dev.ops.rgops.com' }
+    let(:instance) { cloud.find(name) }
 
     subject { instance }
     it { should be_instance_of(Mystro::Cloud::Record) }
-    its(:id) { should == id }
+    its(:name) { should == name }
   end
 
   context "all" do
@@ -42,16 +43,16 @@ describe Mystro::Cloud::Aws::Balancer do
     end
   end
 
-  if Mystro.config.test!.spend
+  #if Mystro.config.test!.spend
     context "create and destroy" do
       subject { instance }
 
-      it { should be_instance_of(Mystro::Cloud::Balancer) }
-      its(:id) { should_not == nil }
+      it { should be_instance_of(Mystro::Cloud::Record) }
+      its(:name) { should_not == nil }
       it "should destroy" do
         sleep 5
         expect { cloud.destroy(instance) }.not_to raise_error
       end
     end
-  end
+  #end
 end

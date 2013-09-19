@@ -1,7 +1,7 @@
 module Mystro
   module Cloud
     class Zone < Model
-      attribute :id
+      identity :id
       attribute :domain
     end
   end

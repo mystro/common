@@ -130,8 +130,8 @@ module Mystro
 
         protected
 
-        def identifier(name, options={})
-          attribute(name, options)
+        def identity(name, options={})
+          attribute(name, options.merge(identity: true))
         end
 
         def attribute(name, options={})
@@ -140,13 +140,17 @@ module Mystro
           name = normal_key(name)
           o = {name: name, type: String, required: true, aliases: []}.merge(options)
           @attributes[name.to_sym] = o
-          define_method(name) do
-            @data[name.to_sym]
-          end
-          define_method("#{name}=") do |value|
-            h = {}
-            h[name.to_sym] = value
-            load(h)
+          list = [name] + o[:aliases]
+          list += [:identity] if o[:identity]
+          list.each do |m|
+            define_method(m) do
+              @data[name.to_sym]
+            end
+            define_method("#{m}=") do |value|
+              h = {}
+              h[name.to_sym] = value
+              load(h)
+            end
           end
           o[:aliases].each do |a|
             @aliases[normal_key(a)] = name

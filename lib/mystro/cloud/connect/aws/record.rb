@@ -1,3 +1,5 @@
+require 'ipaddress'
+
 module Mystro
   module Cloud
     module Aws
@@ -17,7 +19,7 @@ module Mystro
         def _decode(object)
           Mystro::Log.debug "decode: #{object.inspect}"
           model = Mystro::Cloud::Record.new
-          model.name = object.name
+          model.name = object.name.gsub(/\.$/, '')
           model.values = object.value
           model.ttl = object.ttl
           model.type = object.type
@@ -26,16 +28,12 @@ module Mystro
         end
 
         def _encode(model)
-          raise "write me"
           Mystro::Log.debug "encode: #{model.inspect}"
-          options = {
-              image_id: model.image,
-              flavor_id: model.flavor,
-              key_name: model.keypair,
-              groups: model.groups,
-              region: model.region,
-              user_data: model.userdata,
-          }
+          n = model.name
+          n += '.' unless n =~ /\.$/
+          options = ::IPAddress.valid?(model.values.first) ?
+            {name: n, value: model.values, type: 'A', ttl: model.ttl } :
+            {name: model.name, value: model.values, type: 'CNAME', ttl: model.ttl }
           Mystro::Log.debug "encode: #{options.inspect}"
           options
         end

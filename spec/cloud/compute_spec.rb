@@ -1,5 +1,4 @@
-require 'mystro-common'
-
+require 'spec_helper'
 describe Mystro::Cloud::Aws::Compute do
   def cloud
     @cloud ||= Mystro.compute
@@ -72,7 +71,7 @@ describe Mystro::Cloud::Aws::Compute do
       its(:image) { should == model.image }
       its(:flavor) { should == model.flavor }
       it "should destroy" do
-        expect(cloud.destroy(instance)).to be(true)
+        expect { cloud.destroy(instance) }.not_to raise_error
       end
     end
   end

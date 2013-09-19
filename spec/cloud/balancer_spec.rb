@@ -1,22 +1,10 @@
-require 'mystro-common'
-
+require 'spec_helper'
 describe Mystro::Cloud::Aws::Balancer do
   def cloud
     @cloud ||= Mystro.balancer
   end
 
   def model
-    #{
-    #    'Listener'    => {
-    #        "Protocol" => 'HTTP',
-    #        "LoadBalancerPort" => 80,
-    #        "InstanceProtocol" => 'HTTP',
-    #        "InstancePort" => 80,
-    #        "SSLCertificateId" => nil,
-    #        "PolicyNames" => []
-    #    },
-    #    'PolicyNames' => []
-    #}
     @model ||= Mystro::Cloud::Balancer.new(
         id: 'BALANCER-SPEC',
         listeners: [

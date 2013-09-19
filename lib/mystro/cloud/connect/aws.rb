@@ -31,7 +31,10 @@ module Mystro
         end
 
         def destroy(model)
-          fog.destroy(model.id)
+          list = fog.find(model.identity)
+          list.each do |e|
+            e.destroy
+          end
         end
 
         def service
