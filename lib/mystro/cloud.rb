@@ -2,12 +2,22 @@
 module Mystro
   module Cloud
     class << self
-      def new(options)
-        provider = options.delete(:provider)
-        type = options.delete(:type)
+      def new(provider, type, options={})
+        d = {
+            options: {},
+            config: {},
+        }.merge(options)
+        o = d[:options].merge(Mystro::Provider.get(provider).to_hash)
+        c = d[:config]
         klass = class_for(provider, type)
-        klass.new(options)
+        klass.new(o, c)
       end
+      #def new(options)
+      #  provider = options.delete(:provider)
+      #  type = options.delete(:type)
+      #  klass = class_for(provider, type)
+      #  klass.new(options)
+      #end
 
       def class_for(provider, type)
         n = provider.to_s.capitalize
@@ -16,6 +26,7 @@ module Mystro
         c.constantize
       end
     end
+    class NotFound < StandardError; end
   end
 end
 

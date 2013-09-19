@@ -41,8 +41,8 @@ module Mystro
       current_organization.compute
     end
 
-    def dns
-      current_organization.dns
+    def record
+      current_organization.record
     end
 
     def balancer
@@ -56,10 +56,10 @@ module Mystro
 end
 
 require "mystro/config"
+require 'mystro/cloud'
 require "mystro/log"
 require "mystro/provider"
 require "mystro/organization"
-require 'mystro/cloud'
 require "mystro/dsl/template"
 require "mystro/plugin"
 require "mystro/connect"

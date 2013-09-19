@@ -52,7 +52,7 @@ Mystro::Log.debug "logging ... "
 
 desc 'get and show compute'
 task :compute do
-  x = Mystro::Cloud.new({provider: :aws, type: :compute}.merge(options))
+  x = Mystro.compute
   o = x.find("i-69d32404")
   e = o.to_hash
   e.merge!(name: o.name)
@@ -61,10 +61,28 @@ end
 
 desc 'get and show balancer'
 task :balancer do
-  x = Mystro::Cloud.new({provider: :aws, type: :balancer}.merge(options))
+  x = Mystro.balancer
   o = x.find 'RG-EVENTS-1'
   e = o.to_hash
   puts show(e)
+end
+
+desc 'get and show zone'
+task :record do
+  x = Mystro.record
+  o = x.find 'mystro.dev.ops.rgops.com'
+  e = o.to_hash
+  puts show(e)
+end
+
+desc 'show default organization'
+task :org do
+  puts Mystro.organization.to_hash.to_yaml
+end
+
+desc 'show configuration'
+task :config do
+  puts Mystro.config.to_hash.to_yaml
 end
 
 def changelog(last=nil, single=false)

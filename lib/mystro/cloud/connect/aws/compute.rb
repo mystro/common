@@ -1,5 +1,3 @@
-require 'mystro/cloud/connect/aws'
-
 module Mystro
   module Cloud
     module Aws
@@ -14,26 +12,62 @@ module Mystro
           all({ "instance-state-name" => "running" })
         end
 
-        returns Mystro::Cloud::Compute
-        decodes :id
-        decodes :image, from: :image_id
-        decodes :flavor, from: :flavor_id
-        decodes :dns, from: :dns_name
-        decodes :ip, from: :public_ip_address
-        decodes :private_dns, from: :private_dns_name
-        decodes :private_ip, from: :private_ip_address
-        decodes :state
-        decodes :region do
-          service.region
+        def create(model)
+          e = encode(model)
+          r = fog.create(e)
+          model.id = r.id
+          tag(model)
+          model
         end
-        decodes :keypair, from: :key_name
-        decodes :groups, type: Array #, map: Proc.new {|e| e.name}
-        decodes :tags do |out, tags|
-          o = out.tags || {}
-          o[tags.first] = tags.last if tags
-          o
+
+        def tag(model)
+          unless model.id
+            Mystro::Log.warn "tag called with no id"
+            return
+          end
+          t = model.tags
+          service.create_tags(model.id, t)
         end
-        decodes :userdata, from: :user_data
+
+        def untag
+          raise "write me"
+        end
+
+        protected
+
+        def _decode(server)
+          Mystro::Log.debug "decode: #{server.inspect}"
+          model = Mystro::Cloud::Compute.new
+          model.id = server.id
+          model.image = server.image_id
+          model.flavor = server.flavor_id
+          model.dns = server.dns_name
+          model.ip = server.public_ip_address
+          model.private_dns = server.private_dns_name
+          model.private_ip = server.private_ip_address
+          model.state = server.state
+          model.region = service.region
+          model.keypair = server.key_name
+          model.groups = server.groups #.map {|e| e.name}
+          model.tags = server.tags #.inject({}){|h, e| h[e.first] = e.last; h} if server.tags
+          model.userdata = server.user_data
+          Mystro::Log.debug "decode: #{model.inspect}"
+          model
+        end
+
+        def _encode(model)
+          Mystro::Log.debug "encode: #{model.inspect}"
+          options = {
+              image_id: model.image,
+              flavor_id: model.flavor,
+              key_name: model.keypair,
+              groups: model.groups,
+              region: model.region,
+              user_data: model.userdata,
+          }
+          Mystro::Log.debug "encode: #{options.inspect}"
+          options
+        end
       end
     end
   end

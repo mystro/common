@@ -3,13 +3,32 @@ module Mystro
     module Aws
       class Listener < Connect
 
-        returns Mystro::Cloud::Listener
-        decodes :to_port, from: :instance_port
-        decodes :to_protocol, from: :instance_protocol
-        decodes :port, from: :lb_port
-        decodes :protocol
-        decodes :cert, from: :ssl_id
-        decodes :policy, from: :policy_names
+        protected
+
+        def _decode(listener)
+          model = Mystro::Cloud::Listener.new
+          model.to_port = listener.instance_port
+          model.to_protocol = listener.instance_protocol
+          model.port = listener.lb_port
+          model.protocol = listener.protocol
+          model.cert = listener.ssl_id
+          model.policy = listener.policy_names
+          model
+        end
+
+        def _encode(model)
+          {
+              'Listener'    => {
+                  "Protocol" => model.protocol,
+                  "LoadBalancerPort" => model.port,
+                  "InstanceProtocol" => model.to_protocol,
+                  "InstancePort" => model.to_port,
+                  "SSLCertificateId" => model.cert,
+                  "PolicyNames" => []
+              },
+              'PolicyNames' => []
+          }
+        end
       end
     end
   end

@@ -1,46 +1,78 @@
 require 'mystro-common'
 
 describe Mystro::Cloud::Aws::Compute do
-  before(:all) do
-    @cxn = Mystro::Cloud.new(
-        provider: :aws,
-        type: :compute,
-        aws_access_key_id: 'AKIAIVMUCDVWWZFFLVGA',
-        aws_secret_access_key: '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')
+  def cloud
+    @cloud ||= Mystro.compute
   end
 
-  it "should find an instance" do
-    i = @cxn.find('i-69d32404')
-    expect(i).to be_instance_of(Mystro::Cloud::Compute)
-    expect(i.id).to eq('i-69d32404')
-  end
-
-  it "should create and destroy an instance" do
-    model = Mystro::Cloud::Compute.new(
+  def model
+    @model ||= Mystro::Cloud::Compute.new(
         image: 'ami-0145d268',
         flavor: 'm1.small',
         keypair: 'mystro',
-        groups: ['default']
+        groups: ['default'],
+        tags: {'Name' => "compute_spec_testing", 'Environment' => 'rspec', 'Organization' => 'test'}
     )
-    @instance = @cxn.create(model)
-    sleep 5
-    @cxn.destroy(@instance)
   end
 
-  context "should load a collection of instances" do
-    it "should be valid" do
-      list = @cxn.all
-      expect(list.count).not_to eq(0)
-      list.each do |i|
+  def instance
+    @instance ||= cloud.create(model)
+  end
+
+  before(:all) do
+    cloud
+    model
+    instance
+  end
+
+  context "find" do
+    let(:id) { 'i-69d32404' }
+    let(:instance) { cloud.find(id) }
+
+    subject { instance }
+    it { should be_instance_of(Mystro::Cloud::Compute) }
+    its(:id) { should == id }
+  end
+
+  context "missing" do
+    it "should throw an error" do
+      expect { cloud.find('i-00000000') }.to raise_error(Mystro::Cloud::NotFound)
+    end
+  end
+
+  context "all" do
+    let(:all) { cloud.all }
+    it "should return models" do
+      all.each do |i|
         expect(i).to be_instance_of(Mystro::Cloud::Compute)
       end
     end
+  end
 
-    it "should filter" do
-      list = @cxn.running
-      expect(list.count).not_to eq(0)
-      list.each do |i|
+  context "running" do
+    let(:running) { cloud.running }
+    it "should return models" do
+      running.each do |i|
+        expect(i).to be_instance_of(Mystro::Cloud::Compute)
+      end
+    end
+    it "should be running" do
+      running.each do |i|
         expect(i.state).to eq('running')
+      end
+    end
+  end
+
+  if Mystro.config.test!.spend
+    context "create and destroy" do
+      subject { instance }
+
+      it { should be_instance_of(Mystro::Cloud::Compute) }
+      its(:id) { should_not == nil }
+      its(:image) { should == model.image }
+      its(:flavor) { should == model.flavor }
+      it "should destroy" do
+        expect(cloud.destroy(instance)).to be(true)
       end
     end
   end

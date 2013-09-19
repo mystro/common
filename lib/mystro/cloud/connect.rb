@@ -3,11 +3,10 @@ module Mystro
     class Connect
       attr_reader :options
 
-      def initialize(options)
+      def initialize(options, config)
         @options = options
+        @config = config
         @lookup = {}
-        @fog = nil
-        @service = nil
       end
 
       def all
