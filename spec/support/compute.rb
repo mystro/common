@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe Mystro::Cloud::Aws::Compute do
+shared_examples "cloud compute" do
   def cloud
     @cloud ||= Mystro.compute
   end

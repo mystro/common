@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe Mystro::Cloud::Aws::Balancer do
+shared_examples "cloud balancer" do
   def cloud
     @cloud ||= Mystro.balancer
   end

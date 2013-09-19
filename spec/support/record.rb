@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe Mystro::Cloud::Aws::Record do
+shared_examples "cloud record" do
   def cloud
     @cloud ||= Mystro.record
   end
