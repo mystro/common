@@ -47,8 +47,8 @@ def options
   {aws_access_key_id: 'AKIAIVMUCDVWWZFFLVGA', aws_secret_access_key: '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'}
 end
 
-Mystro::Log.console_debug
-Mystro::Log.debug "logging ... "
+#Mystro::Log.console_debug
+#Mystro::Log.debug "logging ... "
 
 desc 'get and show compute'
 task :compute do
@@ -70,7 +70,7 @@ end
 desc 'get and show zone'
 task :record do
   x = Mystro.record
-  o = x.find 'mystro.dev.ops.rgops.com'
+  o = x.find 'labs1.rgops.com'
   e = o.to_hash
   puts show(e)
 end

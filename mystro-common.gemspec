@@ -17,7 +17,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency "fog", "~> 1.12.1"        # talk to cloud
+  gem.add_dependency "fog", "~> 1.15.0"        # talk to cloud
+  #gem.add_dependency "dynect_rest", "0.4.0"    # talk to cloud
   #gem.add_dependency "aws-sdk", "~> 1.0.0"     # talk to cloud
   gem.add_dependency "yell", "~> 1.2.0"        # logging
   gem.add_dependency "hashie"                  # better data objects

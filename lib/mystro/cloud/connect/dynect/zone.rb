@@ -1,6 +1,6 @@
 module Mystro
   module Cloud
-    module Aws
+    module Dynect
       class Zone < Connect
         manages 'Fog::DNS', :zones
 

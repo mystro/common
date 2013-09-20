@@ -26,9 +26,9 @@ shared_examples "cloud compute" do
 
   context "find" do
     let(:id) { 'i-69d32404' }
-    let(:instance) { cloud.find(id) }
+    let(:exists) { cloud.find(id) }
 
-    subject { instance }
+    subject { exists }
     it { should be_instance_of(Mystro::Cloud::Compute) }
     its(:id) { should == id }
   end

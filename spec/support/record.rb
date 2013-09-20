@@ -25,7 +25,7 @@ shared_examples "cloud record" do
     instance
   end
 
-  context "find" do
+  context "find", :find do
     let(:name) { 'mystro.dev.ops.rgops.com' }
     let(:instance) { cloud.find(name) }
 

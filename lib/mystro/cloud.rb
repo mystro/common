@@ -3,6 +3,7 @@ module Mystro
   module Cloud
     class << self
       def new(provider, type, options={})
+        Mystro::Log.debug "Mystro::Cloud.new #{provider.inspect} #{type.inspect} #{options.inspect}"
         d = {
             options: {},
             config: {},
