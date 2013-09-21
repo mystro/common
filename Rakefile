@@ -75,6 +75,14 @@ task :record do
   puts show(e)
 end
 
+desc 'get and show zone'
+task :records do
+  x = Mystro.record
+  o = x.all
+  puts list(%w{name}, o)
+end
+
+
 desc 'show default organization'
 task :org do
   puts Mystro.organization.to_hash.to_yaml
