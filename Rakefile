@@ -79,7 +79,7 @@ desc 'get and show zone'
 task :records do
   x = Mystro.record
   o = x.all
-  puts list(%w{name}, o)
+  puts list(%w{name type ttl values}, o)
 end
 
 

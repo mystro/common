@@ -21,14 +21,19 @@ module Mystro
           end
         end
 
+        def decode(object)
+          raise "decode: object is nil" unless object
+          object.is_a?(Array) ? object.select{|e| %w{A CNAME}.include?(e.type)}.map {|e| _decode(e)} : _decode(object)
+        end
+
         protected
 
         def _decode(object)
           Mystro::Log.debug "decode: #{object.inspect}"
           model = Mystro::Cloud::Record.new
-          #model.id = object.id
+          model.id = object.id
           model.name = object.name.gsub(/\.$/, '')
-          model.values = [object.rdata]
+          model.values = [object.type == 'CNAME' ? object.rdata['cname'] : object.rdata['address']]
           model.ttl = object.ttl
           model.type = object.type
           Mystro::Log.debug "decode: #{model.inspect}"

@@ -24,8 +24,6 @@ module Mystro
         end
 
         @selected = default
-        puts "selected:#{@selected}"
-
       end
 
       def default

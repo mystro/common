@@ -19,7 +19,10 @@ module Mystro
         def _decode(object)
           Mystro::Log.debug "decode: #{object.inspect}"
           model = Mystro::Cloud::Record.new
-          model.name = object.name.gsub(/\.$/, '')
+          n = object.name.gsub(/\.$/, '')
+          # AWS records have no id, fog uses name instead
+          model.id = n
+          model.name = n
           model.values = object.value
           model.ttl = object.ttl
           model.type = object.type

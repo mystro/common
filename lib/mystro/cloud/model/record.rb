@@ -1,7 +1,8 @@
 module Mystro
   module Cloud
     class Record < Model
-      identity :name
+      identity :id
+      attribute :name
       attribute :values, type: Array, of: String
       attribute :ttl, type: Integer
       attribute :type
