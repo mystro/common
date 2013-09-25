@@ -20,6 +20,7 @@ module Mystro
           end
           model.listeners = decoded
 
+          model._raw = balancer
           model
         end
 

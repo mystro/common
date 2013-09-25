@@ -11,6 +11,7 @@ module Mystro
           model = Mystro::Cloud::Zone.new
           model.id = object.id
           model.domain = object.domain
+          model._raw = object
           Mystro::Log.debug "decode: #{model.inspect}"
           model
         end

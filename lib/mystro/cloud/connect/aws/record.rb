@@ -30,6 +30,7 @@ module Mystro
           model.values = object.value
           model.ttl = object.ttl
           model.type = object.type
+          model._raw = object
           Mystro::Log.debug "decode: #{model.inspect}"
           model
         end

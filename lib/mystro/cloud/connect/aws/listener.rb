@@ -13,6 +13,7 @@ module Mystro
           model.protocol = listener.protocol
           model.cert = listener.ssl_id
           model.policy = listener.policy_names
+          model._raw = listener
           model
         end
 
