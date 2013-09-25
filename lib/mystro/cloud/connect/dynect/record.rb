@@ -1,4 +1,5 @@
 require 'ipaddress'
+require 'mystro/ext/fog/dynect/models/dns/records'
 
 module Mystro
   module Cloud
@@ -7,23 +8,20 @@ module Mystro
         manages 'Fog::DNS', :records
 
         def find(name)
-          Mystro::Log.debug "find start"
-          o = decode(fog.all.detect {|e| e.name == name})
-          Mystro::Log.debug "find finish"
-          o
+          decode(fog.all.detect { |e| e.name == name })
+          #decode(fog.find_by_name(name).detect { |e| e.name == name })
         end
 
         def service
           @service ||= begin
             z = @config[:zone]
-            s = zones.fog.all.detect {|e| e.domain == z}
-            s
+            zones.fog.all.detect { |e| e.domain == z }
           end
         end
 
         def decode(object)
           raise "decode: object is nil" unless object
-          object.is_a?(Array) ? object.select{|e| %w{A CNAME}.include?(e.type)}.map {|e| _decode(e)} : _decode(object)
+          object.is_a?(Array) ? object.select { |e| %w{A CNAME}.include?(e.type) }.map { |e| _decode(e) } : _decode(object)
         end
 
         protected
@@ -45,8 +43,8 @@ module Mystro
           n = model.name
           n += '.' unless n =~ /\.$/
           options = ::IPAddress.valid?(model.values.first) ?
-              {name: n, value: model.values, type: 'A', ttl: model.ttl } :
-              {name: model.name, value: model.values, type: 'CNAME', ttl: model.ttl }
+              {name: n, value: model.values, type: 'A', ttl: model.ttl} :
+              {name: model.name, value: model.values, type: 'CNAME', ttl: model.ttl}
           Mystro::Log.debug "encode: #{options.inspect}"
           options
         end
