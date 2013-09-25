@@ -14,6 +14,7 @@ module Mystro
       attribute :userdata, type: String, required: false
       attribute :groups, type: Array, of: String
       attribute :tags, type: Hash, required: false
+      attribute :_raw, type: Object, required: false
 
       def name
         tags && tags['Name']

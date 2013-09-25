@@ -1,31 +1,16 @@
 require 'spec_helper'
 shared_examples "cloud compute" do
-  def cloud
-    @cloud ||= Mystro.compute
-  end
-
   def model
-    @model ||= Mystro::Cloud::Compute.new(
-        image: 'ami-0145d268',
-        flavor: 'm1.small',
-        keypair: 'mystro',
-        groups: ['default'],
-        tags: {'Name' => "compute_spec_testing", 'Environment' => 'rspec', 'Organization' => 'test'}
-    )
-  end
-
-  def instance
-    @instance ||= cloud.create(model)
+    @model ||= Mystro::Cloud::Compute.new(config[:model])
   end
 
   before(:all) do
     cloud
     model
-    instance
   end
 
   context "find" do
-    let(:id) { 'i-69d32404' }
+    let(:id) { config[:id] }
     let(:exists) { cloud.find(id) }
 
     subject { exists }
@@ -64,13 +49,14 @@ shared_examples "cloud compute" do
 
   if Mystro.config.test!.spend
     context "create and destroy" do
-      subject { instance }
+      let(:model) { config[:model] }
+      instance = cloud.create(model)
 
-      it { should be_instance_of(Mystro::Cloud::Compute) }
-      its(:id) { should_not == nil }
-      its(:image) { should == model.image }
-      its(:flavor) { should == model.flavor }
       it "should destroy" do
+        expect(instance).to be_instance_of(Mystro::Cloud::Compute)
+        expect(instance.id).not_to be(nil)
+        expect(instance.image).to eq(model[:image])
+        expect(instance.flavor).to eq(model[:flavor])
         expect { cloud.destroy(instance) }.not_to raise_error
       end
     end

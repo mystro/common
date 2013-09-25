@@ -5,7 +5,7 @@ module Fog
         def find_by_name(name)
           requires :zone
           data = []
-          service.get_all_records(zone.domain, options).body['data'].select { |url| url =~ /\/#{name}\// }.each do |url|
+          service.get_all_records(zone.domain, {}).body['data'].select { |url| url =~ /\/#{name}\// }.each do |url|
             (_, _, t, _, fqdn, id) = url.split('/')
             type = t.gsub(/Record$/, '')
 

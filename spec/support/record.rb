@@ -1,36 +1,22 @@
 require 'spec_helper'
 shared_examples "cloud record" do
-  def cloud
-    @cloud ||= Mystro.record
-  end
-
   def model
-    @model ||= Mystro::Cloud::Record.new(
-        name: "blarg.dev.ops.rgops.com",
-        values: ["127.7.8.9"],
-        ttl: 60,
-        type: 'A'
-    )
-  end
-
-  def instance
-    @instance ||= begin
-      cloud.create(model)
-    end
+    @model ||= Mystro::Cloud::Record.new(config[:model])
   end
 
   before(:all) do
     cloud
     model
-    instance
   end
 
   context "find", :find do
-    let(:name) { 'mystro.dev.ops.rgops.com' }
-    let(:instance) { cloud.find(name) }
+    let(:id) { config[:id] }
+    let(:name) { config[:name] }
+    let(:model) { cloud.find(id) }
 
-    subject { instance }
+    subject { model }
     it { should be_instance_of(Mystro::Cloud::Record) }
+    its(:id) { should == id }
     its(:name) { should == name }
   end
 
@@ -45,13 +31,20 @@ shared_examples "cloud record" do
 
   #if Mystro.config.test!.spend
     context "create and destroy" do
-      subject { instance }
+      #subject { instance }
+      #
+      #it { should be_instance_of(Mystro::Cloud::Record) }
+      #its(:name) { should_not == nil }
 
-      it { should be_instance_of(Mystro::Cloud::Record) }
-      its(:name) { should_not == nil }
-      it "should destroy" do
-        sleep 5
-        expect { cloud.destroy(instance) }.not_to raise_error
+      it "should create and destroy" do
+        n = cloud.create(model)
+        expect(n).to be_instance_of(Mystro::Cloud::Record)
+        expect(n.name).not_to be(nil)
+
+        o = cloud.find_by_name(config[:model][:name])
+        expect { cloud.destroy(o) }.not_to raise_error
+
+        expect{cloud.find_by_name(config[:model][:name])}.to raise_error
       end
     end
   #end

@@ -8,17 +8,14 @@ module Mystro
             options: {},
             config: {},
         }.merge(options)
+        type = type.to_sym
+        d[:options] ||= {}
+        d[:config] ||= {}
         o = d[:options].merge(Mystro::Provider.get(provider).to_hash)
         c = d[:config]
         klass = class_for(provider, type)
         klass.new(o, c)
       end
-      #def new(options)
-      #  provider = options.delete(:provider)
-      #  type = options.delete(:type)
-      #  klass = class_for(provider, type)
-      #  klass.new(options)
-      #end
 
       def class_for(provider, type)
         n = provider.to_s.capitalize

@@ -5,35 +5,22 @@ shared_examples "cloud balancer" do
   end
 
   def model
-    @model ||= Mystro::Cloud::Balancer.new(
-        id: 'BALANCER-SPEC',
-        listeners: [
-            Mystro::Cloud::Listener.new(
-                protocol: 'HTTP',
-                port: 80,
-                to_protocol: 'HTTP',
-                to_port: 80,
-                cert: nil
-            )
-        ]
-    )
-  end
-
-  def instance
-    @instance ||= cloud.create(model)
+    @model ||= begin
+      l = Mystro::Cloud::Listener.new(config[:listener])
+      Mystro::Cloud::Balancer.new(config[:model].merge(listeners: [l]))
+    end
   end
 
   before(:all) do
     cloud
     model
-    instance
   end
 
   context "find" do
-    let(:id) { 'RG-EVENTS-1' }
-    let(:instance) { cloud.find(id) }
+    let(:id) { config[:id] }
+    let(:exists) { cloud.find(id) }
 
-    subject { instance }
+    subject { exists }
     it { should be_instance_of(Mystro::Cloud::Balancer) }
     its(:id) { should == id }
   end
@@ -49,7 +36,7 @@ shared_examples "cloud balancer" do
 
   if Mystro.config.test!.spend
     context "create and destroy" do
-      subject { instance }
+      subject { cloud.create(model) }
 
       it { should be_instance_of(Mystro::Cloud::Balancer) }
       its(:id) { should_not == nil }

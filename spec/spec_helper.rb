@@ -20,3 +20,17 @@ end
 Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
 
 #Mystro::Log.console_debug
+
+def load_config(provider, type)
+  c = YAML.load_file('test/config.yml')
+  raise "missing configuration: #{provider.inspect} #{type.inspect}" unless c[provider] && c[provider][type]
+  c[provider][type]
+end
+
+def connect(provider, type)
+  cfg = load_config(provider, type)
+  pn = provider
+  opt = cfg['provider']||{}
+  data = cfg['config']||{}
+  Mystro::Cloud.new(pn, type, {options: opt, config: data})
+end

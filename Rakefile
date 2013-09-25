@@ -59,6 +59,14 @@ task :compute do
   puts show(e)
 end
 
+desc 'get list of computes'
+task :computes do
+  x = Mystro.compute
+  list = x.all
+  list.map! {|e| e.to_hash.merge(name: e.tags['Name'])}
+  puts list(%w{id name state ip dns}, list)
+end
+
 desc 'get and show balancer'
 task :balancer do
   x = Mystro.balancer
@@ -70,7 +78,10 @@ end
 desc 'get and show zone'
 task :record do
   x = Mystro.record
-  o = x.find 'labs1.rgops.com'
+  o = x.find_by_name 'mcstg1.rgops.com'
+  e = o.to_hash
+  puts show(e)
+  o = x.find '75069554'
   e = o.to_hash
   puts show(e)
 end

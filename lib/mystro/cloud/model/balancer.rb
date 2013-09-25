@@ -7,6 +7,7 @@ module Mystro
       attribute :zones, type: Array, of: String
       attribute :health, type: Hash
       attribute :listeners, type: Array, of: Hash
+      attribute :_raw, type: Object, required: false
 
     end
   end

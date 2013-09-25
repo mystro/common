@@ -6,6 +6,7 @@ describe Mystro::Cloud::Record do
   let(:type) { 'A' }
   let(:model) {
     Mystro::Cloud::Record.new(
+        id: name,
         name: name,
         values: values,
         ttl: ttl,

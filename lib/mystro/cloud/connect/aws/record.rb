@@ -6,6 +6,10 @@ module Mystro
       class Record < Connect
         manages 'Fog::DNS', :records
 
+        def find_by_name(name)
+          find(name)
+        end
+
         def service
           @service ||= begin
             z = @config[:zone]
