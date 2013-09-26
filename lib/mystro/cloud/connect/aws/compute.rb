@@ -51,6 +51,7 @@ module Mystro
           model.groups = server.groups #.map {|e| e.name}
           model.tags = server.tags #.inject({}){|h, e| h[e.first] = e.last; h} if server.tags
           model.userdata = server.user_data
+          model.zone = server.availability_zone
           model._raw = server
           Mystro::Log.debug "decode: #{model.inspect}"
           model
