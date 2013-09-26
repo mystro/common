@@ -7,6 +7,7 @@ module Mystro
       attribute :protocol
       attribute :policy, type: Array, required: false
       attribute :cert, required: false
+      attribute :_raw, type: Object, required: false
 
       def from
         "#{protocol}:#{port}"
