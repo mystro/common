@@ -60,18 +60,12 @@ module Mystro
     end
 
     def balancer
-      #@balancer ||= Mystro::Connect::Balancer.new(self) if @data.balancer
       @balancer ||= connect(:balancer)
     end
 
     def record
-      #@dns ||= Mystro::Connect::Dns.new(self) if @data.dns
       @dns ||= connect(:record)
     end
-
-    #def environment
-    #  @environment ||= Mystro::Connect::Environment.new(self)
-    #end
 
     protected
 

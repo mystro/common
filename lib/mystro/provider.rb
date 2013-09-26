@@ -33,11 +33,6 @@ module Mystro
       @data   = Hashie::Mash.new(yaml)
     end
 
-    #def to_hash
-    #  dup = @data.dup
-    #  dup.delete(:name)
-    #  dup
-    #end
     def to_hash
       @data.to_hash.symbolize_keys
     end

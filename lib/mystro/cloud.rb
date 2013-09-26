@@ -1,4 +1,3 @@
-
 module Mystro
   module Cloud
     class << self
