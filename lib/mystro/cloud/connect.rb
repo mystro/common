@@ -1,7 +1,7 @@
 module Mystro
   module Cloud
     class Connect
-      attr_reader :options
+      attr_reader :options, :config
 
       def initialize(options, config)
         @options = options

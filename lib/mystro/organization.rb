@@ -72,6 +72,7 @@ module Mystro
     def connect(type)
       raise "#{type} not configured: see mystro/config.yml or mystro/organization/#{@name}.yml" unless @data[type]
       raise "#{type} provider not configured: see mystro/config.yml or mystro/organization/#{@name}.yml" unless @data[type].provider!.name
+      return false if @data[type].disabled? && @data[type].disabled == true
       options = @data[type].provider.to_hash.symbolize_keys
       config = @data[type].config.to_hash.symbolize_keys if @data[type].config
       pn = options.delete(:name)
