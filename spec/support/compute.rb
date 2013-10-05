@@ -47,18 +47,25 @@ shared_examples "cloud compute" do
     end
   end
 
-  if Mystro.config.test!.spend
-    context "create and destroy" do
-      let(:model) { config[:model] }
-      instance = cloud.create(model)
+  context 'volumes' do
+    def vmodel
+      @vmodel ||= Mystro::Cloud::Compute.new(config[:vmodel])
+    end
 
-      it "should destroy" do
-        expect(instance).to be_instance_of(Mystro::Cloud::Compute)
-        expect(instance.id).not_to be(nil)
-        expect(instance.image).to eq(model[:image])
-        expect(instance.flavor).to eq(model[:flavor])
-        expect { cloud.destroy(instance) }.not_to raise_error
-      end
+    it "should create" do
+      expect { cloud.create(vmodel) }.not_to raise_error
     end
   end
+
+  #context "create and destroy" do
+  #  instance = cloud.create(model)
+  #
+  #  it "should destroy" do
+  #    expect(instance).to be_instance_of(Mystro::Cloud::Compute)
+  #    expect(instance.id).not_to be(nil)
+  #    expect(instance.image).to eq(model[:image])
+  #    expect(instance.flavor).to eq(model[:flavor])
+  #    expect { cloud.destroy(instance) }.not_to raise_error
+  #  end
+  #end
 end

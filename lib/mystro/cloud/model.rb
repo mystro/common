@@ -101,6 +101,8 @@ module Mystro
             raise "#{k} required but empty" if v[:required] && type == Array && value.empty?
             raise "incorrect type: #{k}: '#{value.inspect}' is not a '#{type}'" if value && !value.is_a?(type)
           end
+        rescue => e
+          raise "#{e.message}: #{data.inspect}"
         end
 
         def attribute_for(name)

@@ -15,7 +15,8 @@ describe Mystro::Cloud::Compute do
       groups: groups,
       tags: tags,
       region: 'us-east-1',
-      state: :running
+      state: :running,
+      zone: 'us-east-1d'
     )
   }
 

@@ -9,12 +9,12 @@ module Mystro
 
         def find_by_name(name)
           #decode(fog.all.detect { |e| e.name == name })
-          decode(fog.find_by_name(name).detect { |e| e.name == name })
+          decode(service.send(collection).find_by_name(name).detect { |e| e.name == name })
         end
 
         def destroy(model)
           id = model.is_a?(Mystro::Cloud::Model) ? model.identity : model
-          e = fog.get(id)
+          e = service.send(collection).get(id)
           Mystro::Log.debug "destroy: #{e.inspect}"
           e.destroy
           service.publish
@@ -22,7 +22,7 @@ module Mystro
 
         def service
           @service ||= begin
-            list = zones.fog.all
+            list = zones.service.zones.all
             list.detect { |e| e.domain == @config[:zone] }
           end
         end

@@ -25,4 +25,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency "activesupport", "3.2.14" # active support
   gem.add_dependency "ipaddress"               # ip address library
   gem.add_dependency "erubis"                  # userdata templates
+  gem.add_dependency "damsel"                  # dsl
 end

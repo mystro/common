@@ -10,11 +10,12 @@ module Mystro
       attribute :private_dns, type: String, required: false
       attribute :private_ip, type: String, required: false
       attribute :state, type: String
-      attribute :keypair, aliases:[:key], type: String #, type: "Key"
+      attribute :keypair, aliases:[:key], type: String
       attribute :userdata, type: String, required: false
       attribute :groups, type: Array, of: String
       attribute :tags, type: Hash, required: false
-      attribute :zone
+      attribute :zone # availability zone
+      has_many :volumes, type: 'Volume'
       attribute :_raw, type: Object, required: false
 
       def name

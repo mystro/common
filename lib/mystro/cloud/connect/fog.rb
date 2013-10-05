@@ -15,26 +15,30 @@ module Mystro
         end
 
         def all
-          decode(fog.all)
+          decode(service.send(collection).all)
         end
 
         def find(id)
-          i = fog.get(id)
+          i = service.send(collection).get(id)
           raise Mystro::Cloud::NotFound, "could not find #{id}" unless i
           decode(i)
         end
 
         def create(model)
           enc = encode(model)
-          o = fog.create(enc)
+          o = service.send(collection).create(enc)
           decode(o)
         end
 
         def destroy(model)
           id = model.is_a?(Mystro::Cloud::Model) ? model.identity : model
-          e = fog.get(id)
+          e = service.send(collection).get(id)
           Mystro::Log.debug "destroy: #{e.inspect}"
           e.destroy
+        end
+
+        def collection
+          @collection ||= self.class.collection
         end
 
         def service
@@ -45,13 +49,13 @@ module Mystro
           end
         end
 
-        def fog
-          @fog ||= begin
-            collection = self.class.collection
-            s = service.send(collection)
-            s
-          end
-        end
+        #def fog
+        #  @fog ||= begin
+        #    collection = self.class.collection
+        #    s = service.send(collection)
+        #    s
+        #  end
+        #end
 
         class << self
           attr_reader :model, :collection

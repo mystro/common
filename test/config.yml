@@ -33,6 +33,19 @@ aws:
         Name: compute_spec_testing
         Environment: rspec
         Organization: test
+    :vmodel:
+      :image: ami-0145d268
+      :flavor: m1.small
+      :keypair: mystro
+      :groups:
+        - default
+      :volumes:
+        - name: :root
+          size: 25gb
+      :tags:
+        Name: compute_spec_testing_volume
+        Environment: rspec
+        Organization: test
   balancer:
     provider:
       region: us-east-1

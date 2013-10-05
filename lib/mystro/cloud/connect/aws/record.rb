@@ -12,8 +12,9 @@ module Mystro
 
         def service
           @service ||= begin
+            list = zones.service.zones.all
             z = @config[:zone]
-            s = zones.fog.all.detect {|e| e.domain == "#{z}."}
+            s = list.detect {|e| e.domain == "#{z}."}
             s
           end
         end

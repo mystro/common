@@ -2,9 +2,15 @@ require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require 'mystro-common'
 require 'terminal-table'
+require 'awesome_print'
 
 RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
+desc 'run tests and create computes and such that cost money'
+task :spend do
+  Mystro.config.test!.spend = true
+  Rake::Task['spec'].invoke
+end
 def table(head, rows=nil)
   if rows
     t = Terminal::Table.new :headings => head, :rows => rows
@@ -102,6 +108,29 @@ end
 desc 'show configuration'
 task :config do
   puts Mystro.config.to_hash.to_yaml
+end
+
+desc 'template'
+task :template, [:name] do |_, args|
+  name = args.name || 'hdp/live'
+  name.gsub!(/\.rb$/, '') if name =~ /\.rb$/
+  ap Mystro::Dsl.load("config/mystro/templates/#{name}.rb").to_hash
+end
+
+desc 'template cloud'
+task :cloud, [:name] do |_, args|
+  name = args.name || 'hdp/live'
+  ap Mystro::Dsl.load("config/mystro/templates/#{name}.rb").to_cloud
+end
+
+desc 'compute volumes'
+task :volumes do
+  org = Mystro::Organization.get 'ops'
+  connect = org.compute
+  service = connect.service
+  template = Mystro::Dsl.load("config/mystro/templates/test/material.rb").to_cloud
+  options = connect.encode(template.first[:data])
+  ap options
 end
 
 def changelog(last=nil, single=false)
