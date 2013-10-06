@@ -114,13 +114,14 @@ desc 'template'
 task :template, [:name] do |_, args|
   name = args.name || 'hdp/live'
   name.gsub!(/\.rb$/, '') if name =~ /\.rb$/
-  ap Mystro::Dsl.load("config/mystro/templates/#{name}.rb").to_hash
+  t = Mystro::Dsl.load("config/mystro/templates/#{name}.rb")
+  ap t.data
 end
 
 desc 'template cloud'
 task :cloud, [:name] do |_, args|
   name = args.name || 'hdp/live'
-  ap Mystro::Dsl.load("config/mystro/templates/#{name}.rb").to_cloud
+  ap Mystro::Dsl.load("config/mystro/templates/#{name}.rb").actions
 end
 
 desc 'compute volumes'
@@ -128,7 +129,7 @@ task :volumes do
   org = Mystro::Organization.get 'ops'
   connect = org.compute
   service = connect.service
-  template = Mystro::Dsl.load("config/mystro/templates/test/material.rb").to_cloud
+  template = Mystro::Dsl.load("config/mystro/templates/test/material.rb").actions
   options = connect.encode(template.first[:data])
   ap options
 end

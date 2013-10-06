@@ -25,8 +25,12 @@ module Mystro
                 v = [v] unless v.is_a?(Array)
                 @data[k] ||= []
                 v.each do |e|
-                  c = class_for(attr[:of])
-                  @data[k] << c.new(e)
+                  if e.is_a?(Mystro::Cloud::Model)
+                    @data[k] << e
+                  else
+                    c = class_for(attr[:of])
+                    @data[k] << c.new(e)
+                  end
                 end
               else
                 c = class_for(attr[:type])

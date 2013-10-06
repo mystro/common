@@ -1,5 +1,7 @@
 class Mystro::Dsl::Compute < Mystro::Dsl::Base
-  attribute :num, value: 0
+  attribute :num, value: 0 do |value|
+    value == value.to_i
+  end
   attribute :name
   attribute :image
   attribute :flavor
@@ -11,35 +13,44 @@ class Mystro::Dsl::Compute < Mystro::Dsl::Base
   has_many :records
   references :balancer
 
-  def to_cloud
-    c = to_hash
+  def actions
+    c = data
     n = c[:num].to_i
     out = []
     if n > 0
       1.upto(n) do |i|
-        out << to_cloud_data(i, c)
+        out << create_action(i, c)
       end
     else
-      out << to_cloud_data(nil, c)
+      out << create_action(nil, c)
     end
     out
   end
-  def to_cloud_data(i, c)
+
+  private
+
+  def create_action(i, c)
     num = i ? "%02d" % i : ''
+    data = {
+        image: c[:image],
+        flavor: c[:flavor],
+        keypair: c[:keypair],
+        userdata: c[:userdata],
+        groups: c[:group],
+        tags: {'Roles' => c[:role].join(','), 'Name' => "#{c[:name]}#{num}"},
+    }
+    if c[:volume]
+      list = c[:volume].map do |vol|
+        Mystro::Cloud::Volume.new(vol)
+      end
+      data[:volumes] = list
+    end
     {
         model: :compute,
         action: :create,
         balancer: c[:balancer],
         records: c[:record],
-        data: Mystro::Cloud::Compute.new({
-                                             image: c[:image],
-                                             flavor: c[:flavor],
-                                             keypair: c[:keypair],
-                                             userdata: c[:userdata],
-                                             groups: c[:group],
-                                             volumes: c[:volume].map{|e| Mystro::Cloud::Volume.new(e)},
-                                             tags: {'Roles' => c[:role].join(','), 'Name' => "#{c[:name]}#{num}"},
-                                         })
+        data: Mystro::Cloud::Compute.new(data)
     }
   end
 end

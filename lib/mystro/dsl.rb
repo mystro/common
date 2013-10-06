@@ -19,7 +19,7 @@ module Mystro
         name = File.basename(file).gsub(/\.rb$/, "").to_sym
         raise "file: '#{file}' does not exist" unless File.exist?(file)
         @templates[name] ||= begin
-          t = Mystro::Dsl::TemplateFile.new
+          t = Mystro::Dsl::TemplateFile.new(file)
           t.instance_eval(File.read(file), "#{file}:[TemplateFile]")
           t
         end

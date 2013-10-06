@@ -2,13 +2,13 @@ class Mystro::Dsl::Template < Mystro::Dsl::Base
   has_many :computes, named: true
   has_many :balancers, named: true
 
-  def to_cloud
+  def actions
     out = []
-    @data[:compute] && @data[:compute][:value] && @data[:compute][:value].each do |k, c|
-      out += c.to_cloud
+    @data[:compute] && @data[:compute].each do |c|
+      out += c.actions
     end
-    @data[:balancer] && @data[:balancer][:value] && @data[:balancer][:value].each do |k, b|
-      out << b.to_cloud
+    @data[:balancer] && @data[:balancer].each do |b|
+      out += b.actions
     end
     out
   end

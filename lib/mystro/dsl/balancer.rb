@@ -4,16 +4,16 @@ class Mystro::Dsl::Balancer < Mystro::Dsl::Base
   has_one :health
   has_many :listeners
 
-  def to_cloud
-    hash = to_hash
+  def actions
+    hash = data
     b = Mystro::Cloud::Balancer.new({
           health: hash[:health],
           listeners: hash[:listener],
         })
-    {
+    [{
         model: :balancer,
         action: :create,
         data: b
-    }
+    }]
   end
 end

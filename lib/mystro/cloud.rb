@@ -29,3 +29,4 @@ end
 
 require 'mystro/cloud/model'
 require 'mystro/cloud/connect'
+require 'mystro/cloud/action'
