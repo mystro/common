@@ -14,7 +14,7 @@ class Mystro::Dsl::Compute < Mystro::Dsl::Base
   references :balancer
 
   def actions
-    c = data
+    c = to_hash
     n = c[:num].to_i
     out = []
     if n > 0

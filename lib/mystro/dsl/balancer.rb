@@ -5,7 +5,7 @@ class Mystro::Dsl::Balancer < Mystro::Dsl::Base
   has_many :listeners
 
   def actions
-    hash = data
+    hash = to_hash
     b = Mystro::Cloud::Balancer.new({
           health: hash[:health],
           listeners: hash[:listener],

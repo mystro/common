@@ -25,10 +25,10 @@ module Mystro
         end
       end
 
-      def to_cloud(name)
+      def actions(name)
         tf = get(name)
         t = tf[:template]
-        t.to_cloud
+        t.actions
       end
     end
   end
