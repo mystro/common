@@ -69,8 +69,9 @@ module Mystro
               region: model.region,
               user_data: model.userdata,
           }
-          map = mapping(model)
-          options[:block_device_mapping] = map if map
+          #TODO: disable volumes until we can figure out fix for fog
+          #map = mapping(model)
+          #options[:block_device_mapping] = map if map
           Mystro::Log.debug "encode: #{options.inspect}"
           options
         end
