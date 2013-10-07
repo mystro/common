@@ -10,9 +10,11 @@ module Mystro
       attribute :type
       attribute :_raw, type: Object, required: false
 
-      def type
-        @data[:type] || ::IPAddress.valid?(values.first) ? 'A' : 'CNAME'
-      end
+      # TODO: not sure why this doesn't work, keeps returning 'A'
+      #def type
+      #  puts "TYPE: #{@data[:type]} ip?=#{::IPAddress.valid?(values.first)}"
+      #  @data[:type] || ::IPAddress.valid?(values.first) ? 'A' : 'CNAME'
+      #end
     end
   end
 end

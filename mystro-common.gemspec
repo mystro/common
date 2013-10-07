@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "fog", "~> 1.15.0"        # talk to cloud
+  gem.add_dependency "simple_uuid"             # create uuids
   #gem.add_dependency "dynect_rest", "0.4.0"    # talk to cloud
   #gem.add_dependency "aws-sdk", "~> 1.0.0"     # talk to cloud
   gem.add_dependency "yell", "~> 1.2.0"        # logging

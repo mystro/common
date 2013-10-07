@@ -31,26 +31,28 @@ class Mystro::Dsl::Compute < Mystro::Dsl::Base
 
   def create_action(i, c)
     num = i ? "%02d" % i : ''
+    name = "#{c[:name]}#{num}"
+    roles = c[:role].join(',')
+    action = Mystro::Cloud::Action.new('Mystro::Cloud::Compute', :create)
+    action.options = {
+        balancer: c[:balancer],
+        records: c[:record],
+    }
     data = {
         image: c[:image],
         flavor: c[:flavor],
         keypair: c[:keypair],
         userdata: c[:userdata],
         groups: c[:group],
-        tags: {'Roles' => c[:role].join(','), 'Name' => "#{c[:name]}#{num}"},
-    }
+        tags: {'Roles' => roles, 'Name' => name},
+    }.delete_if {|k, v| v.nil?}
     if c[:volume]
       list = c[:volume].map do |vol|
         Mystro::Cloud::Volume.new(vol)
       end
       data[:volumes] = list
     end
-    {
-        model: :compute,
-        action: :create,
-        balancer: c[:balancer],
-        records: c[:record],
-        data: Mystro::Cloud::Compute.new(data)
-    }
+    action.data = data
+    action
   end
 end

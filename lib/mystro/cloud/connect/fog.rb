@@ -33,7 +33,7 @@ module Mystro
         def destroy(model)
           id = model.is_a?(Mystro::Cloud::Model) ? model.identity : model
           e = service.send(collection).get(id)
-          Mystro::Log.debug "destroy: #{e.inspect}"
+          #Mystro::Log.debug "destroy: #{e.inspect}"
           e.destroy
         end
 

@@ -51,12 +51,12 @@ module Mystro
         end
 
         def _encode(model)
-          Mystro::Log.debug "encode: #{model.inspect}"
+          Mystro::Log.debug "encode: #{model.type} #{model.inspect}"
           n = model.name
           n += '.' unless n =~ /\.$/
           options = model.type == 'A' ?
               {id: model.id, name: model.name, rdata: {'address' => model.values.first}, ttl: model.ttl, type: 'A'} :
-              {id: model.id, name: model.name, rdata: {'cname' => model.values.first}, ttl: model.ttl, type: 'A'}
+              {id: model.id, name: model.name, rdata: {'cname' => model.values.first}, ttl: model.ttl, type: 'CNAME'}
           Mystro::Log.debug "encode: #{options.inspect}"
           options
         end

@@ -1,3 +1,5 @@
+require 'simple_uuid'
+
 module Mystro
   module Cloud
     module Aws
@@ -67,34 +69,34 @@ module Mystro
               region: model.region,
               user_data: model.userdata,
           }
-          if model.volumes
-            image = service.images.get(model.image)
-            map = image.block_device_mapping.inject({}) {|h, e| h[e['deviceName']] = e; h}
-            devices = map.keys
-            last = devices.last
-            root = image.root_device_name
-            model.volumes.each do |volume|
-              dev = volume.device || volume.name
-              dev = root if dev == :root
-              unless map[dev]
-                Mystro::Log.error "something wrong, trying to change root volume: #{volume.inspect}"
-                next
-              end
-              if volume.device == :next
-                last = last.next
-                o = {'deviceName' => last, 'volumeSize' => volume.size, 'deleteOnTermination' => volume.dot}
-                o.merge({'snapshotId' => volume.snapshot}) if volume.snapshot
-                o.merge({'virtualName' => volume.virtual}) if volume.virtual
-                map[last] = o
-              else
-                map[dev]['volumeSize'] = volume.size if volume.size
-                map[dev]['snapshotId'] = volume.snapshot if volume.snapshot
-                map[dev]['deleteOnTermination'] = volume.dot if volume.dot
-              end
-            end
-            bdm = map.inject([]) {|a, e| a << e.last}
-            options['blockDeviceMapping'] = bdm
-          end
+          #if model.volumes
+          #  image = service.images.get(model.image)
+          #  map = image.block_device_mapping.inject({}) {|h, e| h[e['deviceName']] = e; h}
+          #  devices = map.keys
+          #  last = devices.last
+          #  root = image.root_device_name
+          #  model.volumes.each do |volume|
+          #    dev = volume.device || volume.name
+          #    dev = root if dev == :root || dev == 'root'
+          #    unless map[dev]
+          #      Mystro::Log.error "something wrong, trying to change volume: #{volume.inspect}"
+          #      next
+          #    end
+          #    if volume.device == :next
+          #      last = last.next
+          #      o = {'deviceName' => last, 'volumeSize' => volume.size, 'deleteOnTermination' => volume.dot}
+          #      o.merge({'snapshotId' => volume.snapshot}) if volume.snapshot
+          #      o.merge({'virtualName' => volume.virtual}) if volume.virtual
+          #      map[last] = o
+          #    else
+          #      map[dev]['volumeSize'] = volume.size if volume.size
+          #      map[dev]['snapshotId'] = volume.snapshot if volume.snapshot
+          #      map[dev]['deleteOnTermination'] = volume.dot if volume.dot
+          #    end
+          #  end
+          #  bdm = map.inject([]) {|a, e| a << e.last}
+          #  options['blockDeviceMapping'] = bdm
+          #end
           Mystro::Log.debug "encode: #{options.inspect}"
           options
         end
