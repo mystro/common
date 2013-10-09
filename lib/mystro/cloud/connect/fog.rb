@@ -1,5 +1,5 @@
 require 'fog'
-require 'ext/fog/balancer'
+require 'fog/ext/balancer'
 
 module Mystro
   module Cloud

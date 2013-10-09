@@ -9,13 +9,13 @@ module Fog
       recognizes :timeout, :persistent
       recognizes :provider # remove post deprecation
 
-      model_path 'fog/dynect/models/dns'
+      model_path 'fog/ext/dynect/models/dns'
       model       :record
       collection  :records
       model       :zone
       collection  :zones
 
-      request_path 'ext/fog/dynect/requests/dns'
+      request_path 'fog/ext/dynect/requests/dns'
       request :delete_record
       request :delete_zone
       request :get_node_list

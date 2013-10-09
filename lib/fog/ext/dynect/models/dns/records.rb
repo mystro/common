@@ -1,9 +1,10 @@
 require 'fog/core/collection'
-require 'fog/dynect/models/dns/record'
+require 'fog/ext/dynect/models/dns/record'
 
 module Fog
   module DNS
     class Dynect
+
       class Records < Fog::Collection
 
         attribute :zone
@@ -20,7 +21,6 @@ module Fog
             # leave out the default, read only records
             # by putting this here we don't make the secondary request for these records
             next if ['NS', 'SOA'].include?(type)
-
             record = service.get_record(type, zone.domain, fqdn, 'record_id' => id).body['data']
 
             data << {
