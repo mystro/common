@@ -13,10 +13,10 @@ module Mystro
         end
 
         def destroy(model)
-          id = model.is_a?(Mystro::Cloud::Model) ? model.identity : model
-          e = service.send(collection).get(id)
+          raise "destroy argument should be Mystro::Cloud::Model: #{model.inspect}" unless model.is_a?(Mystro::Cloud::Model)
+          e = find_by_name(model.name)
           Mystro::Log.debug "destroy: #{e.inspect}"
-          e.destroy
+          e._raw.destroy if e && e._raw
           service.publish
         end
 

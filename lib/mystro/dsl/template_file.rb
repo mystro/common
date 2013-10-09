@@ -7,6 +7,7 @@ class Mystro::Dsl::TemplateFile < Mystro::Dsl::Base
   def compute(name)
     n = name.to_sym
     dsl = computes.detect {|e| e[:name] == n}
+    raise "no template entry for compute #{n}" unless dsl
     act = dsl.actions.first
     act.to_model
   end

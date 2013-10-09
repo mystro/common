@@ -97,7 +97,7 @@ module Mystro
               last = last.next
               o = {'deviceName' => last, 'volumeSize' => volume.size, 'deleteOnTermination' => volume.dot}
               o.merge({'snapshotId' => volume.snapshot}) if volume.snapshot
-              #o.merge({'virtualName' => volume.virtual}) if volume.virtual # can't create more virtual, so not needed
+              o.merge({'virtualName' => volume.virtual}) if volume.virtual # can't create more virtual, so not needed
               map[last] = o
             else
               map[dev]['volumeSize'] = volume.size.to_s if volume.size
@@ -126,6 +126,8 @@ module Mystro
         end
 
         def map_transform(map)
+          puts "MAP:"
+          ap map
           map.inject({}) { |h, e| h[e['deviceName']] = e; h }
         end
 
