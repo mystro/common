@@ -15,7 +15,7 @@ module Mystro
       attribute :groups, type: Array, of: String
       attribute :tags, type: Hash, required: false
       attribute :zone # availability zone
-      has_many :volumes, type: 'Volume'
+      has_many :volumes, type: 'Volume', required: false
       attribute :_raw, type: Object, required: false
 
       def name

@@ -41,7 +41,7 @@ aws:
         - default
       :volumes:
         - name: :root
-          size: 25gb
+          size: 25
       :tags:
         Name: compute_spec_testing_volume
         Environment: rspec

@@ -1,5 +1,3 @@
-require 'simple_uuid'
-
 module Mystro
   module Cloud
     module Aws
@@ -70,8 +68,8 @@ module Mystro
               user_data: model.userdata,
           }
           #TODO: disable volumes until we can figure out fix for fog
-          #map = mapping(model)
-          #options[:block_device_mapping] = map if map
+          map = mapping(model)
+          options[:block_device_mapping] = map if map
           Mystro::Log.debug "encode: #{options.inspect}"
           options
         end

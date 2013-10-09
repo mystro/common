@@ -1,3 +1,6 @@
+require 'ext/fog/dynect/dns'
+require 'ext/fog/dynect/models/dns/records'
+require 'ext/fog/dynect/requests/dns/get_all_records'
 require 'mystro/cloud/connect/fog'
 
 module Mystro

@@ -83,12 +83,13 @@ end
 
 desc 'get and show zone'
 task :record do
-  x = Mystro.record
-  o = x.find_by_name 'mcstg1.rgops.com'
-  e = o.to_hash
+  o = Mystro::Organization.get('rg')
+  x = o.record
+  r = x.find_by_name 'mcstg1.rgops.com'
+  e = r.to_hash
   puts show(e)
-  o = x.find '75069554'
-  e = o.to_hash
+  r = x.find '75069597'
+  e = r.to_hash
   puts show(e)
 end
 
