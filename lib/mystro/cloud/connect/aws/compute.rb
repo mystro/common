@@ -88,17 +88,30 @@ module Mystro
               Mystro::Log.error "trying to change ephemeral root volume"
               return
             end
-            dev = root if dev == :root || dev == 'root'
-            unless map[dev]
-              Mystro::Log.error "something wrong, trying to change volume: #{volume.inspect}"
-              return
+            if dev == :root || dev == 'root'
+              dev = root
+              unless map[dev]
+                Mystro::Log.error "something wrong, trying to change root volume: #{volume.inspect}"
+                return
+              end
             end
             if volume.device == :next
               last = last.next
-              o = {'deviceName' => last, 'volumeSize' => volume.size, 'deleteOnTermination' => volume.dot}
-              o.merge({'snapshotId' => volume.snapshot}) if volume.snapshot
-              o.merge({'virtualName' => volume.virtual}) if volume.virtual # can't create more virtual, so not needed
-              map[last] = o
+              map[last] = {
+                  'deviceName' => last,
+                  'volumeSize' => volume.size,
+                  'deleteOnTermination' => volume.dot,
+                  'snapshotId' => volume.snapshot,
+                  'virtualName' => volume.virtual,
+              }
+            elsif !map[dev]
+              map[dev] = {
+                  'deviceName' => dev,
+                  'volumeSize' => volume.size,
+                  'deleteOnTermination' => volume.dot,
+                  'snapshotId' => volume.snapshot,
+                  'virtualName' => volume.virtual,
+              }
             else
               map[dev]['volumeSize'] = volume.size.to_s if volume.size
               map[dev]['snapshotId'] = volume.snapshot if volume.snapshot
@@ -111,10 +124,10 @@ module Mystro
         def change_keys(map)
           name_mapping = {
               'deviceName' => 'DeviceName',
+              'virtualName' => 'VirtualName',
               'snapshotId' => 'Ebs.SnapshotId',
               'volumeSize' => 'Ebs.VolumeSize',
               'deleteOnTermination' => 'Ebs.DeleteOnTermination',
-              'virtualName' => 'VirtualName',
           }
           map.map do |volume|
             out = {}
@@ -126,8 +139,6 @@ module Mystro
         end
 
         def map_transform(map)
-          puts "MAP:"
-          ap map
           map.inject({}) { |h, e| h[e['deviceName']] = e; h }
         end
 
