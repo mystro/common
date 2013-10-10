@@ -4,6 +4,15 @@ module Mystro
       class Balancer < Connect
         manages 'Fog::Balancer', :load_balancers
 
+        def create(model)
+          list = model.computes
+          enc = encode(model)
+          bal = service.send(collection).create(enc)
+          bal.register_instances(list)
+          bal.save
+          decode(bal)
+        end
+
         protected
 
         def _decode(balancer)
