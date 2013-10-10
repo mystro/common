@@ -25,11 +25,14 @@ module Mystro
         end
 
         def _encode(model)
-          {
+          Mystro::Log.debug "encode < #{model.inspect}"
+          o = {
               id: model.id,
               'ListenerDescriptions' => model.listeners.map {|l| listeners.encode(l)},
               'AvailabilityZones' => model.zones
           }
+          Mystro::Log.debug "encode > #{o.inspect}"
+          o
         end
 
         private

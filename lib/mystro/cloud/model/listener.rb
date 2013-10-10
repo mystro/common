@@ -12,6 +12,7 @@ module Mystro
       def from
         "#{protocol}:#{port}"
       end
+
       def to
         "#{to_protocol}:#{to_port}"
       end
