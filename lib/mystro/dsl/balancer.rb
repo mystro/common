@@ -6,8 +6,11 @@ class Mystro::Dsl::Balancer < Mystro::Dsl::Base
 
   def actions
     hash = to_hash
+    puts "HASH:#{hash.inspect}"
     action = Mystro::Cloud::Action.new('Mystro::Cloud::Balancer', :create)
     action.data = {
+        name: hash[:name],
+        primary: hash[:primary],
         health: hash[:health],
         listeners: hash[:listener],
     }

@@ -2,6 +2,7 @@ module Mystro
   module Cloud
     class Compute < Model
       identity :id
+      attribute :name
       attribute :image, type: String
       attribute :flavor, type: String
       attribute :region, type: String

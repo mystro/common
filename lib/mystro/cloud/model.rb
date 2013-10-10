@@ -18,7 +18,7 @@ module Mystro
             k = alias_for(k) || k
             attr = attribute_for(k)
             #puts "attr: #{k}: #{attr.inspect}"
-            raise "attr not found for #{k.inspect}" unless attr
+            raise "#{self.class.name}: attr not found for #{k.inspect}" unless attr
             if attr[:child]
               if attr[:type] == Array
                 next unless v# && v.count
@@ -40,6 +40,8 @@ module Mystro
                   @data[k] = c.new(v)
                 end
               end
+            elsif attr[:type] == :boolean
+              @data[k] = v && (v == true || v == "true")
             else
               @data[k] = v
             end
