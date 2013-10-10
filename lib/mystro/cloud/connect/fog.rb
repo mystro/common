@@ -31,9 +31,11 @@ module Mystro
         end
 
         def destroy(model)
+          Mystro::Log.debug "destroy: #{model.inspect}"
           raise "destroy argument should be Mystro::Cloud::Model: #{model.inspect}" unless model.is_a?(Mystro::Cloud::Model)
-          e = service.send(collection).get(model.id)
-          e.destroy if e
+          e = service.send(collection).get(model.identity)
+          raise "object not found for id: #{model.identity}" unless e
+          e.destroy
         end
 
         def collection
@@ -47,14 +49,6 @@ module Mystro
             s
           end
         end
-
-        #def fog
-        #  @fog ||= begin
-        #    collection = self.class.collection
-        #    s = service.send(collection)
-        #    s
-        #  end
-        #end
 
         class << self
           attr_reader :model, :collection
