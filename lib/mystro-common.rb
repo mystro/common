@@ -1,8 +1,6 @@
-require "mystro/common/version"
-require "fog"
-require "mystro/ext/fog/balancer"
-require "hashie/mash"
-require "active_support/all"
+require 'mystro/common/version'
+require 'hashie/mash'
+require 'active_support/all'
 
 module Mystro
   class << self
@@ -21,13 +19,13 @@ module Mystro
 
     def directory
       @dir ||= begin
-        d = "~/.mystro"
-        if ENV["MYSTRO_CONFIG"]
-          d = ENV["MYSTRO_CONFIG"]
-        elsif File.exists?("./config/mystro")
-          d = "./config/mystro"
-        elsif File.exists?("./.mystro")
-          d = "./.mystro"
+        d = '~/.mystro'
+        if ENV['MYSTRO_CONFIG']
+          d = ENV['MYSTRO_CONFIG']
+        elsif File.exists?('./config/mystro')
+          d = './config/mystro'
+        elsif File.exists?('./.mystro')
+          d = './.mystro'
         end
         File.expand_path(d)
       end
@@ -41,8 +39,8 @@ module Mystro
       current_organization.compute
     end
 
-    def dns
-      current_organization.dns
+    def record
+      current_organization.record
     end
 
     def balancer
@@ -55,14 +53,15 @@ module Mystro
   end
 end
 
-require "mystro/config"
-require "mystro/provider"
-require "mystro/organization"
-require "mystro/log"
-require "mystro/dsl/template"
-require "mystro/plugin"
-require "mystro/connect"
-require "mystro/userdata"
+require 'mystro/config'
+require 'mystro/log'
+require 'mystro/cloud'
+require 'mystro/provider'
+require 'mystro/organization'
+require 'mystro/dsl/oldtemplate'
+require 'mystro/plugin'
+require 'mystro/userdata'
+require 'mystro/dsl'
 
 Mystro::Config.instance
 Mystro::Provider.read

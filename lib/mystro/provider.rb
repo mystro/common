@@ -31,13 +31,10 @@ module Mystro
       @name   = name
       @file   = file
       @data   = Hashie::Mash.new(yaml)
-      @data.name = name
     end
 
     def to_hash
-      dup = @data.dup
-      dup.delete(:name)
-      dup
+      @data.to_hash.symbolize_keys
     end
   end
 end
