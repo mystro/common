@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.3.0:
+* sync version with server
+
 ## v0.2.0:
 * tests green.
 * conversion work completed... still want to test things a bit
