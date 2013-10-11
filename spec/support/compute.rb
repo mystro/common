@@ -59,7 +59,7 @@ shared_examples 'cloud compute' do
       expect(vinstance.id).not_to be(nil)
       expect(vinstance.image).to eq(vmodel[:image])
       expect(vinstance.flavor).to eq(vmodel[:flavor])
-      expect { vinstance.destroy(instance) }.not_to raise_error
+      expect { cloud.destroy(vinstance) }.not_to raise_error
     end
   end
 end

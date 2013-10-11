@@ -21,7 +21,6 @@ def table(head, rows=nil)
 end
 
 def list(keys, list)
-  #ap list
   rows = []
   list.each do |l|
     row = []
@@ -116,7 +115,7 @@ task :template, [:name] do |_, args|
   name = args.name || 'hdp/live'
   name.gsub!(/\.rb$/, '') if name =~ /\.rb$/
   t = Mystro::Dsl.load("config/mystro/templates/#{name}.rb")
-  ap t.to_hash
+  ap t
 end
 
 desc 'template cloud'
@@ -130,11 +129,11 @@ task :volumes do
   org = Mystro::Organization.get 'ops'
   connect = org.compute
   service = connect.service
-  template = Mystro::Dsl.load("config/mystro/templates/test/material.rb")
-  ap template.to_hash
-  actions  = template.actions
-  options = connect.encode(actions.first[:data])
-  ap options
+  template = Mystro::Dsl.load("config/mystro/templates/hdp/live.rb")
+  puts template.to_hash.to_yaml
+  #actions  = template.actions
+  #options = connect.encode(actions.first.data)
+  #ap options
 end
 
 def changelog(last=nil, single=false)
