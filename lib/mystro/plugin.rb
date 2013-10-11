@@ -24,7 +24,8 @@ module Mystro
       end
 
       def load(plugins={ })
-        plugins.each do |plugin, data|
+        list = plugins.reject {|k, v| k == 'disabled'}
+        list.each do |plugin, data|
           begin
             f = "#{Mystro.directory}/plugins/#{plugin}"
             Mystro::Log.debug "loading plugin: #{plugin} #{f}"
@@ -37,7 +38,7 @@ module Mystro
 
       def disabled?(name)
         Mystro::Log.debug "disabled? #{name}"
-        Mystro.config.disabled && Mystro.config.disabled[name]
+        Mystro.config.plugins && Mystro.config.plugins.disabled && Mystro.config.plugins.disabled[name]
       end
 
       def register(key, opts={})
@@ -95,7 +96,7 @@ module Mystro
 
       def config_for(klass)
         name = klass.name.split('::').last.downcase.to_sym
-        return Mystro.account.plugins[name] if Mystro.account.plugins && Mystro.account.plugins[name]
+        return Mystro.organization.plugins[name] if Mystro.organization.plugins && Mystro.organization.plugins[name]
         { }
       end
 

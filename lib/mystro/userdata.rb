@@ -22,7 +22,7 @@ module Mystro
             :roles        => roles,
             :environment  => environment,
             :nickname     => name,
-            :account      => "unknown",
+            :organization      => "unknown",
             :zone         => "unknown.local",
             :dependencies => [],
             :gems         => [],

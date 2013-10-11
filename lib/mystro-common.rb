@@ -1,8 +1,6 @@
-require "mystro/common/version"
-require "fog"
-require "mystro/ext/fog/balancer"
-require "hashie/mash"
-require "active_support/all"
+require 'mystro/common/version'
+require 'hashie/mash'
+require 'active_support/all'
 
 module Mystro
   class << self
@@ -10,58 +8,61 @@ module Mystro
       Mystro::Config.instance.data
     end
 
-    def account
-      raise "mystro account unset! default account ('#{config.default_account}') doesn't exist?" unless current_account
-      current_account.data
+    def organization
+      raise "mystro organization unset! default organization ('#{config.default_organization}') doesn't exist?" unless current_organization
+      current_organization.data
     end
 
-    def current_account
-      Mystro::Account.get(selected)
+    def current_organization
+      Mystro::Organization.get(selected)
     end
 
     def directory
       @dir ||= begin
-        d = "~/.mystro"
-        if ENV["MYSTRO_CONFIG"]
-          d = ENV["MYSTRO_CONFIG"]
-        elsif File.exists?("./config/mystro")
-          d = "./config/mystro"
-        elsif File.exists?("./.mystro")
-          d = "./.mystro"
+        d = '~/.mystro'
+        if ENV['MYSTRO_CONFIG']
+          d = ENV['MYSTRO_CONFIG']
+        elsif File.exists?('./config/mystro')
+          d = './config/mystro'
+        elsif File.exists?('./.mystro')
+          d = './.mystro'
         end
         File.expand_path(d)
       end
     end
 
     def selected
-      Mystro::Account.selected
+      Mystro::Organization.selected
     end
 
     def compute
-      current_account.compute
+      current_organization.compute
     end
 
-    def dns
-      current_account.dns
+    def record
+      current_organization.record
     end
 
     def balancer
-      current_account.balancer
+      current_organization.balancer
     end
 
     def environment
-      current_account.environment
+      current_organization.environment
     end
   end
 end
 
-require "mystro/config"
-require "mystro/account"
-require "mystro/log"
-require "mystro/dsl/template"
-require "mystro/plugin"
-require "mystro/connect"
-require "mystro/userdata"
+require 'mystro/config'
+require 'mystro/log'
+require 'mystro/cloud'
+require 'mystro/provider'
+require 'mystro/organization'
+require 'mystro/dsl/oldtemplate'
+require 'mystro/plugin'
+require 'mystro/userdata'
+require 'mystro/dsl'
 
 Mystro::Config.instance
-Mystro::Account.read
+Mystro::Provider.read
+Mystro::Organization.read

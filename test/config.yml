@@ -1,0 +1,71 @@
+aws:
+  record:
+    config:
+      :zone: ops.rgops.com
+    :id: mystro.dev.ops.rgops.com
+    :name: mystro.dev.ops.rgops.com
+    :model:
+      :name: blarg.dev.ops.rgops.com
+      :values:
+        - 127.7.8.9
+      :ttl: 60
+      :type: A
+  compute:
+    provider:
+      region: us-east-1
+    config:
+      flavor: m1.large
+      region: us-east-1
+      groups:
+        - default
+      keypair: mystro
+      image: ami-0145d268 # make sure this is an image in the region specified to fog.
+      # userdata package to use
+      userdata: rg
+    :id: i-3e99485f
+    :model:
+      :image: ami-0145d268
+      :flavor: m1.small
+      :keypair: mystro
+      :groups:
+        - default
+      :tags:
+        Name: compute_spec_testing
+        Environment: rspec
+        Organization: test
+    :vmodel:
+      :image: ami-0145d268
+      :flavor: m1.small
+      :keypair: mystro
+      :groups:
+        - default
+      :volumes:
+        - name: :root
+          size: 25
+      :tags:
+        Name: compute_spec_testing_volume
+        Environment: rspec
+        Organization: test
+  balancer:
+    provider:
+      region: us-east-1
+    :id: 'RG-EVENTS-1'
+    :model:
+      :id: 'BALANCER-SPEC'
+    :listener:
+      :protocol: HTTP
+      :port: 80
+      :to_protocol: HTTP
+      :to_port: 80
+dynect:
+  record:
+    config:
+      :zone: rgops.com
+    :id: 75069554
+    :name: labs1.rgops.com
+    :model:
+      :name: blarg.rgops.com
+      :values:
+        - 127.7.8.9
+      :ttl: 60
+      :type: A
