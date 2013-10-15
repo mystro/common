@@ -9,29 +9,49 @@ shared_examples "cloud record" do
     model
   end
 
-  context "find", :find do
-    let(:id) { config[:id] }
-    let(:name) { config[:name] }
-    let(:model) { cloud.find(id) }
+  context 'find', :find do
+    context 'by id' do
+      let(:id) { config[:id] }
+      let(:name) { config[:name] }
+      let(:found) { cloud.find(id) }
 
-    subject { model }
-    it { should be_instance_of(Mystro::Cloud::Record) }
-    its(:id) { should == id }
-    its(:name) { should == name }
+      subject { found }
+      it { should be_instance_of(Mystro::Cloud::Record) }
+      its(:id) { should == id }
+      its(:name) { should == name }
+    end
+
+    context 'by name' do
+      let(:id) { config[:id] }
+      let(:name) { config[:name] }
+      let(:found) { cloud.find_by_name(name) }
+
+      subject { found }
+      it { should be_instance_of(Mystro::Cloud::Record) }
+      its(:id) { should == id }
+      its(:name) { should == name }
+    end
+
+    context 'doesnt exist' do
+      let(:id) { '123456789'}
+      it 'should handle missing' do
+        expect { cloud.find(id) }.to raise_error(Mystro::Cloud::NotFound)
+        #expect(found).to be(nil)
+      end
+    end
   end
 
-  context "all" do
+  context 'all' do
     let(:all) { cloud.all }
-    it "should return models" do
+    it 'should return models' do
       all.each do |i|
         expect(i).to be_instance_of(Mystro::Cloud::Record)
       end
     end
   end
 
-  context "create and destroy" do
-
-    it "should create and destroy" do
+  context 'create and destroy' do
+    it 'should create and destroy' do
       n = cloud.create(model)
       expect(n).to be_instance_of(Mystro::Cloud::Record)
       expect(n.name).not_to be(nil)

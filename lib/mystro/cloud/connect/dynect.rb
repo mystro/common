@@ -1,5 +1,5 @@
 require 'mystro/cloud/connect/fog'
-require 'fog/ext/dynect'
+require 'fog/ext/dynect/models/dns/records'
 
 module Mystro
   module Cloud
