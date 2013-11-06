@@ -41,7 +41,7 @@ shared_examples "cloud record" do
     end
   end
 
-  context 'all' do
+  context 'all', :all do
     let(:all) { cloud.all }
     it 'should return models' do
       all.each do |i|
@@ -50,7 +50,7 @@ shared_examples "cloud record" do
     end
   end
 
-  context 'create and destroy' do
+  context 'create and destroy', :cad do
     it 'should create and destroy' do
       n = cloud.create(model)
       expect(n).to be_instance_of(Mystro::Cloud::Record)
