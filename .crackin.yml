@@ -1,5 +1,6 @@
 ---
 crackin:
+  name: 'mystro-common'
   scm: git
   changelog: CHANGELOG.md
   branch:
