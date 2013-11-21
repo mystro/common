@@ -2,10 +2,11 @@ module Mystro
   module Common
     module Version
       MAJOR = 0
-      MINOR = 1
-      TINY  = 7
+      MINOR = 3
+      TINY  = 0
       TAG   = nil
-      STRING = [MAJOR, MINOR, TINY, TAG].compact.join(".")
+      LIST  = [MAJOR, MINOR, TINY, TAG]
+      STRING = LIST.compact.join(".")
     end
   end
 end
