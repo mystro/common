@@ -1,5 +1,8 @@
 ### Changelog
 
+##### v0.3.1.alpha1:
+* trouble with crackin release process
+
 ##### v0.3.1.alpha0:
 * add name to crackin config
 * integrate crackin for gem releases
