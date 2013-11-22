@@ -1,5 +1,4 @@
 require 'ipaddress'
-#require 'ext/fog/dynect/models/dns/records'
 
 module Mystro
   module Cloud
