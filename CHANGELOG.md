@@ -1,5 +1,8 @@
 ### Changelog
 
+##### v0.3.1:
+* crackin release working: FIRST! :)
+
 ##### v0.3.1.alpha2:
 * think I've resolved problem with crackin release
 
