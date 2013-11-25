@@ -1,5 +1,8 @@
 ### Changelog
 
+##### v0.3.2:
+* use the released version of crackin
+
 ##### v0.3.1:
 * crackin release working: FIRST! :)
 
@@ -79,9 +82,6 @@
 * new DSL framework
 * ruby version file
 * changelog rake tasks
-
-##### v0.1.5:
-
 
 ##### v0.1.4:
 * merge
