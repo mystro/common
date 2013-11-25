@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'damsel', path: '../../damsel'
-gem 'crackin', path: '../../crackin'
+gem 'crackin'
 
 gem 'rake', '10.0.4'
 gem 'awesome_print'

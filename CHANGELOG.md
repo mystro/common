@@ -1,5 +1,20 @@
 ### Changelog
 
+##### v0.3.1:
+* crackin release working: FIRST! :)
+
+##### v0.3.1.alpha2:
+* think I've resolved problem with crackin release
+
+##### v0.3.1.alpha1:
+* trouble with crackin release process
+
+##### v0.3.1.alpha0:
+* add name to crackin config
+* integrate crackin for gem releases
+* update to fog 1.18
+* fog issues resolved
+
 ##### v0.3.0:
 * sync version with server
 
@@ -65,6 +80,9 @@
 * ruby version file
 * changelog rake tasks
 
+##### v0.1.5:
+
+
 ##### v0.1.4:
 * merge
 * hard code rake version in Gemfile to match mystro server
@@ -89,4 +107,7 @@
 ##### v0.1.1:
 * new DSL framework
 * ruby version file
+
+##### v0.1.0:
+
 
