@@ -82,13 +82,15 @@ module Mystro
           devices = map.keys
           last = devices.last
           root = image.root_device_name
+          Mystro::Log.debug "ROOT: #{root.inspect}"
           model.volumes.each do |volume|
+            Mystro::Log.debug "VOLUME: #{volume.inspect}"
             dev = volume.device || volume.name
-            if dev == :root && image.root_device_type != "ebs"
-              Mystro::Log.error "trying to change ephemeral root volume"
-              return
-            end
             if dev == :root || dev == 'root'
+              if image.root_device_type != "ebs"
+                Mystro::Log.error "trying to change ephemeral root volume"
+                raise "trying to change ephemeral root volume"
+              end
               dev = root
               unless map[dev]
                 Mystro::Log.error "something wrong, trying to change root volume: #{volume.inspect}"
@@ -117,6 +119,7 @@ module Mystro
               map[dev]['snapshotId'] = volume.snapshot if volume.snapshot
               map[dev]['deleteOnTermination'] = volume.dot if volume.dot
             end
+            Mystro::Log.debug "VOLUME: => (#{dev}) #{map[dev].inspect}"
           end
           change_keys(map_untransform(map))
         end
