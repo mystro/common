@@ -3,8 +3,8 @@ module Mystro
     module Version
       MAJOR = 0
       MINOR = 3
-      TINY = 2
-      TAG = nil
+      TINY = 3
+      TAG = 'rc0'
       LIST  = [MAJOR, MINOR, TINY, TAG]
       STRING = LIST.compact.join(".")
     end

@@ -1,5 +1,9 @@
 ### Changelog
 
+##### v0.3.3.rc0:
+* clean up plugin handling for gem-based plugins. minor tweak to compute.volume processing (this needs more work)
+* some debug logging and tweaks around compute volumes
+
 ##### v0.3.2:
 * use the released version of crackin
 
@@ -82,6 +86,9 @@
 * new DSL framework
 * ruby version file
 * changelog rake tasks
+
+##### v0.1.5:
+
 
 ##### v0.1.4:
 * merge
