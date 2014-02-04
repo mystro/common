@@ -1,5 +1,8 @@
 ### Changelog
 
+##### v0.3.3:
+
+
 ##### v0.3.3.rc0:
 * clean up plugin handling for gem-based plugins. minor tweak to compute.volume processing (this needs more work)
 * some debug logging and tweaks around compute volumes
