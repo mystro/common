@@ -26,13 +26,28 @@ module Mystro
       def load(plugins={ })
         list = plugins.reject {|k, v| k == 'disabled'}
         list.each do |plugin, data|
-          begin
-            f = "#{Mystro.directory}/plugins/#{plugin}"
-            Mystro::Log.debug "loading plugin: #{plugin} #{f}"
-            require f
-          rescue LoadError, StandardError => e
-            Mystro::Log.error "error while loading plugin: #{plugin}: #{e.message} at #{e.backtrace.first}"
+          load_plugin(plugin, data)
+        end
+      end
+
+      def load_plugin(plugin, data)
+        begin
+          # load library, if it exists
+          # this is for plugins in gems
+          require "mystro/plugin/#{plugin}"
+        rescue => e
+          Mystro::Log.debug "load plugin: #{plugin}: #{e.message}"
+        end
+
+        begin
+          # load file in config directory if it exists
+          file = "#{Mystro.directory}/plugins/#{plugin}"
+          if File.exists?("#{file}.rb")
+            Mystro::Log.debug "plugin: #{plugin} = #{file}"
+            require file
           end
+        rescue LoadError, StandardError => e
+          Mystro::Log.error "load plugin: #{plugin}: #{e.message}"
         end
       end
 

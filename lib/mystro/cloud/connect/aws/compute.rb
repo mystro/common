@@ -115,7 +115,7 @@ module Mystro
                   'virtualName' => volume.virtual,
               }
             else
-              map[dev]['volumeSize'] = volume.size.to_s if volume.size
+              map[dev]['volumeSize'] = volume.size.to_s if volume.size.to_i > 0
               map[dev]['snapshotId'] = volume.snapshot if volume.snapshot
               map[dev]['deleteOnTermination'] = volume.dot if volume.dot
             end
