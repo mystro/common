@@ -4,15 +4,16 @@ module Mystro
       def run(event, *args)
         return if Mystro.config.mock
 
+        Mystro::Log.debug "hooks: #{event}"
         @hooks ||= []
         @hooks.select { |e| e[:event] == event }.each do |plugin|
           klass = plugin[:class]
           block = plugin[:block]
           begin
-            Mystro::Log.debug "calling #{klass} :: #{event}"
+            Mystro::Log.debug "hooks: #{event}: #{klass}"
             block.call(args.dup)
           rescue => e
-            Mystro::Log.error "failed to run event #{event} for #{klass}: #{e.message}"
+            Mystro::Log.error "failed hook: #{event}: #{klass}: #{e.message}"
             Mystro::Log.debug e
           end
         end

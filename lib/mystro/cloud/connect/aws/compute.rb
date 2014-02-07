@@ -16,7 +16,8 @@ module Mystro
           e = encode(model)
           r = service.send(collection).create(e)
           model.id = r.id
-          tag(model)
+          t = tag(model)
+          Mystro::Plugin.run "#{class_name}:create", model
           model
         end
 
@@ -27,6 +28,7 @@ module Mystro
           end
           t = model.tags
           service.create_tags(model.id, t)
+          t
         end
 
         def untag

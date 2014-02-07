@@ -27,7 +27,9 @@ module Mystro
         def create(model)
           enc = encode(model)
           o = service.send(collection).create(enc)
-          decode(o)
+          d = decode(o)
+          Mystro::Plugin.run "#{class_name}:create", d
+          d
         end
 
         def destroy(model)
@@ -35,6 +37,7 @@ module Mystro
           raise "destroy argument should be Mystro::Cloud::Model: #{model.inspect}" unless model.is_a?(Mystro::Cloud::Model)
           e = service.send(collection).get(model.identity)
           raise "object not found for id: #{model.identity}" unless e
+          Mystro::Plugin.run "#{class_name}:destroy", model
           e.destroy
         end
 
@@ -48,6 +51,14 @@ module Mystro
             s = model.constantize.new(@options)
             s
           end
+        end
+
+        def class_name
+          c = self.class.name.downcase
+          l = c.split('::')
+          n = l.last
+          raise "class_name failed: #{self.class.name}" unless n
+          n
         end
 
         class << self

@@ -10,7 +10,9 @@ module Mystro
           bal = service.send(collection).create(enc)
           bal.register_instances(list)
           bal.save
-          decode(bal)
+          d = decode(bal)
+          Mystro::Plugin.run "#{class_name}:create", d
+          d
         end
 
         protected
