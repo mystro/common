@@ -36,8 +36,9 @@ module Mystro
           # load library, if it exists
           # this is for plugins in gems
           require "mystro/plugin/#{plugin}"
-        rescue => e
-          Mystro::Log.debug "load plugin: #{plugin}: #{e.message}"
+        rescue LoadError, StandardError => e
+          Mystro::Log.debug "load plugin warning: #{plugin}: #{e.message}"
+          Mystro::Log.debug e
         end
 
         begin
@@ -48,7 +49,8 @@ module Mystro
             require file
           end
         rescue LoadError, StandardError => e
-          Mystro::Log.error "load plugin: #{plugin}: #{e.message}"
+          Mystro::Log.debug "load plugin warning: #{plugin}: #{e.message}"
+          Mystro::Log.debug e
         end
       end
 
